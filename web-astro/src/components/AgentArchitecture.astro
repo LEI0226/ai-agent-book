@@ -1,6 +1,6 @@
 ---
 import { editions, translator, type Locale } from '../lib/i18n';
-const { locale = 'en' } = Astro.props as { locale?: Locale };
+const { locale = 'zh-CN' } = Astro.props as { locale?: Locale };
 const t = translator(locale);
 const stages = [
   {

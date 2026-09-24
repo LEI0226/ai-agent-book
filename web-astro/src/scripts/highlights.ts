@@ -1,4 +1,3 @@
-import { machineLanguage } from '../lib/machine-language';
 import { browserTranslator } from '../lib/i18n';
 import { createNoteEditor } from './note-editor';
 import {
@@ -16,7 +15,6 @@ import {
 } from '../lib/highlight-store';
 
 export async function initHighlights() {
-  if (machineLanguage(new URL(location.href))) return;
   const t = browserTranslator();
   const article = document.querySelector<HTMLElement>('#chapter-content');
   if (!article) return;

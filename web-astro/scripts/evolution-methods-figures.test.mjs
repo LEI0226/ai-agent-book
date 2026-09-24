@@ -57,7 +57,7 @@ const figures = {
 };
 
 test('Chapter 9 evolution-method layouts retain every localized label in both themes', () => {
-  assert.equal(Object.keys(editions).length, 15);
+  assert.equal(Object.keys(editions).length, 1);
   for (const { directory } of Object.values(editions))
     for (const [number, { layout, labels: expectedCount }] of Object.entries(
       figures,
@@ -104,7 +104,7 @@ test('Chapter 9 evolution-method layouts retain every localized label in both th
 
 test('Figure 9-2 keeps the three verification layers and evaluation flow explicit', () => {
   const source = readFileSync(
-    new URL('../../book-en/images/fig9-2.svg', import.meta.url),
+    new URL('../../book/images/fig9-2.svg', import.meta.url),
     'utf8',
   );
   const layout = layoutTrajectoryVerification(source);
@@ -132,7 +132,7 @@ test('Figure 9-2 keeps the three verification layers and evaluation flow explici
 
 test('Figure 9-3 presents four complementary update carriers without progression cues', () => {
   const source = readFileSync(
-    new URL('../../book-en/images/fig9-3.svg', import.meta.url),
+    new URL('../../book/images/fig9-3.svg', import.meta.url),
     'utf8',
   );
   const layout = layoutEvolutionMethods(source);
@@ -157,11 +157,11 @@ test('Figure 9-3 presents four complementary update carriers without progression
 
 test('Chapter 9 evolution-method layouts reserve readable wrapping zones', () => {
   const verificationSource = readFileSync(
-    new URL('../../book-en/images/fig9-2.svg', import.meta.url),
+    new URL('../../book/images/fig9-2.svg', import.meta.url),
     'utf8',
   );
   const methodsSource = readFileSync(
-    new URL('../../book-en/images/fig9-3.svg', import.meta.url),
+    new URL('../../book/images/fig9-3.svg', import.meta.url),
     'utf8',
   );
 
@@ -184,11 +184,11 @@ test('Chapter 9 evolution-method layouts reserve readable wrapping zones', () =>
 
 test('Chapter 9 evolution-method layouts reject source structure drift', () => {
   const verificationSource = readFileSync(
-    new URL('../../book-en/images/fig9-2.svg', import.meta.url),
+    new URL('../../book/images/fig9-2.svg', import.meta.url),
     'utf8',
   );
   const methodsSource = readFileSync(
-    new URL('../../book-en/images/fig9-3.svg', import.meta.url),
+    new URL('../../book/images/fig9-3.svg', import.meta.url),
     'utf8',
   );
   assert.throws(

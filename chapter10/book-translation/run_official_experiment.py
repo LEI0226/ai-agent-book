@@ -26,7 +26,12 @@ from openai import OpenAI
 
 HERE = Path(__file__).parent
 REPO = HERE.parents[1]
-DEFAULT_SOURCES = (REPO / "book-en" / "chapter1.md", REPO / "book-en" / "chapter2.md")
+# The bundled short English technical book. This used to point at
+# `book-en/chapter1.md` / `chapter2.md` — the real English edition of the book —
+# but that edition was removed from the repository, so the default is now the
+# self-contained sample the experiment ships. Pass `--source` explicitly to
+# translate something else.
+DEFAULT_SOURCES = (HERE / "sample_book" / "chapter1.md", HERE / "sample_book" / "chapter2.md")
 DIMENSIONS = ("accuracy", "fluency", "terminology", "markdown_code_fidelity")
 
 
@@ -504,7 +509,7 @@ def load_checkpoint(path: Path, fingerprint: str) -> Any | None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Official full-scope Experiment 10-2 campaign")
-    parser.add_argument("--source", action="append", help="Markdown chapter; repeat (default: book-en ch1/ch2)")
+    parser.add_argument("--source", action="append", help="Markdown chapter; repeat (default: sample_book ch1/ch2)")
     parser.add_argument("--provider", choices=("mistral", "ark", "openai", "openrouter"), default="mistral")
     parser.add_argument("--model", help="translation model (default chosen for provider)")
     parser.add_argument(

@@ -69,8 +69,8 @@ function timelineCard(svg, id) {
   };
 }
 
-test('async-architecture layouts preserve every source label and remain in bounds in all 15 editions', () => {
-  assert.equal(Object.keys(editions).length, 15);
+test('async-architecture layouts preserve every source label and remain in bounds in the single edition', () => {
+  assert.equal(Object.keys(editions).length, 1);
   for (const { directory, dir } of Object.values(editions))
     for (const figure of [1, 2, 3, 4, 5]) {
       const source = readFigure(directory, figure);
@@ -281,13 +281,13 @@ test('Figure 6-5 retains the compatibility flow and both native asynchronous flo
 
 test('async-architecture layouts reject unsupported figures and changed source structure', () => {
   assert.throws(
-    () => layoutAsyncArchitecture(readFigure('book-en', 1), 6),
+    () => layoutAsyncArchitecture(readFigure('book', 1), 6),
     /Unsupported async-architecture figure/,
   );
   assert.throws(
     () =>
       layoutAsyncArchitecture(
-        readFigure('book-en', 1).replace('<rect ', '<circle '),
+        readFigure('book', 1).replace('<rect ', '<circle '),
         1,
       ),
     /source structure changed/,
@@ -295,7 +295,7 @@ test('async-architecture layouts reject unsupported figures and changed source s
   assert.throws(
     () =>
       layoutAsyncArchitecture(
-        readFigure('book-en', 5).replace(
+        readFigure('book', 5).replace(
           'viewBox="0 0 880 540"',
           'viewBox="0 0 900 540"',
         ),

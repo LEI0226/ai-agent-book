@@ -115,19 +115,21 @@ test('paired prose prices stay literal across the source editions', async () => 
     }
   }
 
+  // A floor, not a target: 5 with the Chinese edition (chapters 2 and 7). It
+  // was 20 when the repository shipped 15 translated editions.
   assert.ok(
-    priceSpans > 20,
-    'Expected real paired-price examples in the books',
+    priceSpans > 3,
+    'Expected real paired-price examples in the book',
   );
 });
 
-test('the rendered English chapters use KaTeX for formulas and text for prices', async () => {
+test('the rendered chapters use KaTeX for formulas and text for prices', async () => {
   const chapter8 = chapter(
-    editions.find(({ directory }) => directory === 'book-en'),
+    editions.find(({ directory }) => directory === 'book'),
     8,
   );
   const chapter2 = chapter(
-    editions.find(({ directory }) => directory === 'book-en'),
+    editions.find(({ directory }) => directory === 'book'),
     2,
   );
   const [mathHtml, moneyHtml] = await Promise.all([
@@ -149,10 +151,13 @@ test('the rendered English chapters use KaTeX for formulas and text for prices',
       `Missing rendered formula ${expression}`,
     );
 
-  assert.match(String(moneyHtml), /billed at \$0\.05 per minute/);
-  assert.match(String(moneyHtml), /rises to \$180 next year/);
+  // The same two sentences as the English edition this test used to read
+  // ("billed at $0.05 per minute" / "rises to $180 next year"), now asserted
+  // against the Chinese manuscript.
+  assert.match(String(moneyHtml), /电话通话按每分钟 \$0\.05 计费/);
+  assert.match(String(moneyHtml), /涨到 \$180/);
   assert.doesNotMatch(
     String(moneyHtml),
-    /<annotation encoding="application\/x-tex">0\.05 per minute/,
+    /<annotation encoding="application\/x-tex">[^<]*0\.05/,
   );
 });

@@ -48,33 +48,6 @@ const chapter =
   sources[
     `../../../../${edition.directory}/chapter${chapterNumber}${edition.suffix}.md`
   ];
-const headings = chapter
-  .getHeadings()
-  .filter(({ depth }) => depth === 2 || depth === 3);
-const sectionLinks: Record<string, Record<string, string>> = {};
-for (const language of locales) {
-  const target = editions[language];
-  const translated = sources[
-    `../../../../${target.directory}/chapter${chapterNumber}${target.suffix}.md`
-  ]
-    .getHeadings()
-    .filter(({ depth }) => depth === 2 || depth === 3);
-  // Preserve the section when translated heading structures match.
-  // Otherwise fall back to the chapter rather than guessing a destination.
-  if (
-    translated.length !== headings.length ||
-    translated.some((heading, index) => heading.depth !== headings[index].depth)
-  )
-    continue;
-  headings.forEach((heading, index) => {
-    (sectionLinks[heading.slug] ??= {})[language] = translated[index].slug;
-  });
-}
 ---
 
-<Reader
-  locale={locale}
-  chapter={chapter}
-  chapterNumber={chapterNumber}
-  sectionLinks={sectionLinks}
-/>
+<Reader locale={locale} chapter={chapter} chapterNumber={chapterNumber} />

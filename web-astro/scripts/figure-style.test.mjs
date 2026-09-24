@@ -17,7 +17,7 @@ const workflows = {
 
 test('The attention matrix keeps its data colors and numeric labels in both themes', () => {
   const source = readFileSync(
-    new URL('../../book-en/images/fig2-6.svg', import.meta.url),
+    new URL('../../book/images/fig2-6.svg', import.meta.url),
     'utf8',
   );
   const data = source.match(
@@ -86,7 +86,7 @@ test('Chapter 7 workflow layouts preserve labels and canvas bounds across all ed
 });
 const en = (n) =>
   readFileSync(
-    new URL(`../../book-en/images/fig7-${n}.svg`, import.meta.url),
+    new URL(`../../book/images/fig7-${n}.svg`, import.meta.url),
     'utf8',
   );
 test('Evaluation environments keep both interaction directions and independent reward pipelines', () => {

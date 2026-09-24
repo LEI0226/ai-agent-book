@@ -65,7 +65,7 @@ const figures = {
 };
 
 test('Chapter 10 context layouts retain every localized source label in both themes', () => {
-  assert.equal(Object.keys(editions).length, 15);
+  assert.equal(Object.keys(editions).length, 1);
   for (const { directory } of Object.values(editions))
     for (const [number, { layout, labels: expectedCount }] of Object.entries(
       figures,
@@ -107,7 +107,7 @@ test('Chapter 10 context layouts retain every localized source label in both the
 });
 
 test('Figure 10-1 preserves the shared and isolated collaboration comparison', () => {
-  const layout = layoutSharedContextComparison(readFigure('book-en', 1));
+  const layout = layoutSharedContextComparison(readFigure('book', 1));
 
   assert.match(layout, /viewBox="0 0 1320 1260"/);
   assert.match(layout, /data-collaboration-model="shared-context"/);
@@ -120,7 +120,7 @@ test('Figure 10-1 preserves the shared and isolated collaboration comparison', (
 });
 
 test('Figure 10-2 keeps filesystem access, mount, upload, and external-source relationships', () => {
-  const layout = layoutVirtualFilesystemMounts(readFigure('book-en', 2));
+  const layout = layoutVirtualFilesystemMounts(readFigure('book', 2));
 
   assert.match(layout, /viewBox="0 0 1320 1010"/);
   assert.equal((layout.match(/data-region="[^"]+"/g) || []).length, 4);
@@ -180,7 +180,7 @@ test('Figure 10-2 keeps filesystem access, mount, upload, and external-source re
 });
 
 test('Figure 10-3 retains the review loop and ordered improvement rounds', () => {
-  const layout = layoutProposerReviewerLoop(readFigure('book-en', 3));
+  const layout = layoutProposerReviewerLoop(readFigure('book', 3));
 
   assert.match(layout, /viewBox="0 0 1320 1090"/);
   assert.match(layout, /data-agent="proposer"/);
@@ -216,7 +216,7 @@ test('Figure 10-3 retains the review loop and ordered improvement rounds', () =>
 });
 
 test('Figure 10-4 retains manager dispatch and the A-to-B-to-C sequence', () => {
-  const layout = layoutManagerSequentialCoordination(readFigure('book-en', 4));
+  const layout = layoutManagerSequentialCoordination(readFigure('book', 4));
 
   assert.match(layout, /viewBox="0 0 1320 920"/);
   assert.match(layout, /data-manager="true"/);
@@ -258,7 +258,7 @@ test('Figure 10-4 retains manager dispatch and the A-to-B-to-C sequence', () => 
 
 test('Chapter 10 context layouts use readable wrapped HTML labels', () => {
   for (const [number, { layout }] of Object.entries(figures)) {
-    const svg = layout(readFigure('book-en', number));
+    const svg = layout(readFigure('book', number));
     const labelCount = (svg.match(/<foreignObject\b/g) || []).length;
     const fontSizes = [...svg.matchAll(/font-size:(\d+)px/g)].map((match) =>
       Number(match[1]),
@@ -291,7 +291,7 @@ test('Chapter 10 context layouts reject source structure drift', () => {
 
   for (const [number, mutate] of mutations)
     assert.throws(
-      () => figures[number].layout(mutate(readFigure('book-en', number))),
+      () => figures[number].layout(mutate(readFigure('book', number))),
       new RegExp(`Figure 10-${number} source structure changed`),
     );
 });

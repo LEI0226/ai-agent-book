@@ -1,12 +1,10 @@
 ---
-import { translator, editions, locales, type Locale } from '../lib/i18n';
+import { translator, editions, type Locale } from '../lib/i18n';
 import Icon from './Icon.astro';
-import { withBase } from '../lib/site-path.mjs';
-import machineTranslation from '../lib/machine-translation.json';
 import { repo } from '../lib/book';
 const {
   reader = false,
-  locale = 'en',
+  locale = 'zh-CN',
   chapterNumber = 1,
 } = Astro.props as {
   reader?: boolean;
@@ -36,53 +34,6 @@ const edition = editions[locale];
       <a href={repo}>GitHub <Icon name="external" size={15} /></a>
     </nav>
     <div class="header-tools">
-      <details class="language-picker">
-        <summary aria-label={t('Language')} title={edition.name}
-          ><span aria-hidden="true">◎</span>
-          <span class="current-language">{edition.name}</span>
-          <span aria-hidden="true">⌄</span></summary
-        >
-        <nav aria-label={t('Language')}>
-          {
-            locales.map((language) => (
-              <a
-                href={
-                  reader
-                    ? withBase(
-                        `/${editions[language].directory}/chapter${chapterNumber}${editions[language].suffix}/`,
-                      )
-                    : editions[language].home
-                }
-                lang={language}
-                hreflang={language}
-                dir={editions[language].dir}
-                aria-current={language === locale ? 'page' : undefined}
-              >
-                {editions[language].name}
-                <span aria-hidden="true">{language === locale ? '✓' : ''}</span>
-              </a>
-            ))
-          }
-          <div class="machine-language-heading" dir="auto">
-            机器翻译 / Machine translation<br /><small
-              >未经审核 / Not vetted</small
-            >
-          </div>
-          {
-            machineTranslation.languages.map((language) => (
-              <a
-                data-machine-language={language.name}
-                href={`${reader ? withBase(`/book-en/chapter${chapterNumber}/`) : editions.en.home}?translate=${language.locale}`}
-                lang={language.locale}
-                dir={'dir' in language ? language.dir : 'ltr'}
-              >
-                {language.label}
-                <small aria-hidden="true">MT</small>
-              </a>
-            ))
-          }
-        </nav>
-      </details>
       <button
         class="icon-button theme-toggle"
         type="button"

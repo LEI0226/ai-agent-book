@@ -33,8 +33,8 @@ function assertBalancedXml(svg, label) {
     );
 }
 
-test('coding application layouts preserve labels, bounds, and typography in 15 editions', () => {
-  assert.equal(Object.keys(editions).length, 15);
+test('coding application layouts preserve labels, bounds, and typography', () => {
+  assert.equal(Object.keys(editions).length, 1);
   for (const { directory, dir } of Object.values(editions))
     for (const figure of [8, 9, 10, 11]) {
       const input = source(directory, figure);
@@ -95,7 +95,7 @@ test('coding application layouts preserve labels, bounds, and typography in 15 e
 });
 
 test('dynamic form keeps five stages, form fields, and four forward edges', () => {
-  const result = layoutCodingApplication(source('book-en', 8), 8);
+  const result = layoutCodingApplication(source('book', 8), 8);
   assert.equal((result.match(/data-form-stage=/g) || []).length, 5);
   assert.equal((result.match(/data-form-field=/g) || []).length, 4);
   assert.equal((result.match(/data-edge=/g) || []).length, 4);
@@ -108,7 +108,7 @@ test('dynamic form keeps five stages, form fields, and four forward edges', () =
 });
 
 test('artifact comparison keeps five traditional and three artifact stages', () => {
-  for (const directory of ['book-en', 'book', 'book-vi']) {
+  for (const directory of ['book']) {
     const result = layoutCodingApplication(source(directory, 9), 9);
     assert.equal((result.match(/data-traditional-stage=/g) || []).length, 5);
     assert.equal((result.match(/data-artifact-stage=/g) || []).length, 3);
@@ -122,7 +122,7 @@ test('artifact comparison keeps five traditional and three artifact stages', () 
 });
 
 test('bootstrapping keeps evolution and directed copy relationships without feedback', () => {
-  const result = layoutCodingApplication(source('book-en', 10), 10);
+  const result = layoutCodingApplication(source('book', 10), 10);
   assert.equal((result.match(/data-evolution-stage=/g) || []).length, 4);
   assert.equal((result.match(/data-agent-version=/g) || []).length, 2);
   assert.equal((result.match(/data-edge=/g) || []).length, 4);
@@ -134,7 +134,7 @@ test('bootstrapping keeps evolution and directed copy relationships without feed
 });
 
 test('meta-agent keeps requirement, four stages, generated artifacts, and comparison', () => {
-  for (const directory of ['book-en', 'book-es']) {
+  for (const directory of ['book']) {
     const result = layoutCodingApplication(source(directory, 11), 11);
     assert.equal((result.match(/data-meta-stage=/g) || []).length, 4);
     assert.equal((result.match(/data-generated-item=/g) || []).length, 4);
@@ -145,14 +145,14 @@ test('meta-agent keeps requirement, four stages, generated artifacts, and compar
 
 test('coding application layouts reject unsupported figures and source drift', () => {
   assert.throws(
-    () => layoutCodingApplication(source('book-en', 8), 7),
+    () => layoutCodingApplication(source('book', 8), 7),
     /Unsupported coding application figure/,
   );
   for (const figure of [8, 9, 10, 11])
     assert.throws(
       () =>
         layoutCodingApplication(
-          source('book-en', figure).replace(/<rect\b[^>]*\/>/, ''),
+          source('book', figure).replace(/<rect\b[^>]*\/>/, ''),
           figure,
         ),
       new RegExp(`Figure 5-${figure} source structure changed`),
@@ -160,7 +160,7 @@ test('coding application layouts reject unsupported figures and source drift', (
   assert.throws(
     () =>
       layoutCodingApplication(
-        source('book-en', 11).replace(
+        source('book', 11).replace(
           '</svg>',
           '<text x="0" y="0">unexpected</text></svg>',
         ),

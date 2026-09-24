@@ -106,5 +106,5 @@ assert.ok(
   'Chinese homepage redirect must stay under ASTRO_BASE',
 );
 console.log(
-  `Verified ${pages.size} pages, ${checked} local URLs, and all 15 README edition links under ${base}.`,
+  `Verified ${pages.size} pages, ${checked} local URLs, and the README edition link under ${base}.`,
 );

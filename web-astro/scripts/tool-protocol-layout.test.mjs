@@ -43,7 +43,7 @@ test('Tool protocol layouts retain all localized labels and readable typography'
     }
 });
 test('MCP sequence preserves three requests, three dashed responses, and two lifelines', () => {
-  const svg = layoutToolProtocol(source('book-en', 1), 1);
+  const svg = layoutToolProtocol(source('book', 1), 1);
   assert.equal((svg.match(/data-direction="request"/g) || []).length, 3);
   assert.equal((svg.match(/data-direction="response"/g) || []).length, 3);
   assert.equal((svg.match(/marker-end=/g) || []).length, 6);
@@ -54,7 +54,7 @@ test('MCP sequence preserves three requests, three dashed responses, and two lif
   assert.equal((svg.match(/stroke-dasharray=/g) || []).length, 5);
 });
 test('Hierarchical search retains server selection, tool order, and three arrows', () => {
-  const svg = layoutToolProtocol(source('book-en', 2), 2);
+  const svg = layoutToolProtocol(source('book', 2), 2);
   assert.equal((svg.match(/data-server=/g) || []).length, 5);
   assert.equal((svg.match(/data-tool=/g) || []).length, 5);
   assert.equal((svg.match(/marker-end=/g) || []).length, 3);
@@ -64,13 +64,13 @@ test('Tool protocol source guards reject changed relationships', () => {
   assert.throws(
     () =>
       layoutToolProtocol(
-        source('book-en', 1).replace(/<line\b[^>]*\/>/, ''),
+        source('book', 1).replace(/<line\b[^>]*\/>/, ''),
         1,
       ),
     /relationships changed/,
   );
   assert.throws(
-    () => layoutToolProtocol(source('book-en', 2), 3),
+    () => layoutToolProtocol(source('book', 2), 3),
     /Unsupported/,
   );
 });

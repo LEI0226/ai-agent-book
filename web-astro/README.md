@@ -1,10 +1,10 @@
 # Astro book reader
 
 The web reader for **AI Agents in Depth**, built with plain Astro.
-The homepage and complete Chapters 1–10 are implemented in all 15 maintained editions:
-English, Simplified Chinese, Traditional Chinese, Spanish, Indonesian, Russian,
-Tamil, Vietnamese, Japanese, Korean, Arabic, Turkish, Hungarian, Hebrew, and
-Brazilian Portuguese. All ten chapters are available in the reader.
+The homepage and complete Chapters 1–10 are implemented in Simplified Chinese,
+the book's original language. (The reader used to ship 15 language editions; the
+community translations were removed from the repository, so it is now
+single-language.)
 
 ## Publishing
 
@@ -12,8 +12,8 @@ The `deploy-pages` GitHub Actions workflow builds MkDocs and Astro on every push
 to `main` and on manual dispatch. Astro is included at `site/astro/` in the same
 Pages artifact as MkDocs and is published at
 [the Astro reader](https://bojieli.github.io/ai-agent-book/astro/).
-English starts at `/ai-agent-book/astro/en/`; the other editions use their own
-locale homepages. Existing MkDocs URLs and companion experiment pages remain available.
+The Chinese homepage is at the reader root; existing MkDocs URLs and companion
+experiment pages remain available.
 Relevant pull requests run the builds and checks without deploying.
 
 Astro uses `/` locally. To reproduce the GitHub Pages build:
@@ -30,8 +30,8 @@ ASTRO_BASE=/ai-agent-book/astro/ npm run check:deployment
 
 The existing test suite runs against the root build. The deployment check then
 verifies the prefixed build's page links, scripts, styles, fonts, figure variants,
-and README links for all 15 editions. `ASTRO_BASE` must match the directory where
-the generated `dist/` contents will be served; it does not change the on-disk layout.
+and README links. `ASTRO_BASE` must match the directory where the generated
+`dist/` contents will be served; it does not change the on-disk layout.
 
 ## Run locally
 
@@ -43,11 +43,10 @@ npm ci
 npm run dev
 ```
 
-Open the URL printed by Astro (normally `http://127.0.0.1:4321`). The chapter is
-at `/book-en/chapter1/`, matching its existing online path. Use the header language
-switcher to choose an edition. Chinese is the default homepage at `/`; English is at `/en/`. Other homepages use locale paths such as `/ja/`, `/ar/`,
-and `/pt-BR/`; Chapter 1 keeps each edition’s existing book path. Astro 7 runs the
-server in the background; stop it with `npx astro dev stop` from this directory.
+Open the URL printed by Astro (normally `http://127.0.0.1:4321`). The homepage is
+at `/` and Chapter 1 is at `/book/chapter1/`, matching the paths used online.
+Astro 7 runs the server in the background; stop it with `npx astro dev stop` from
+this directory.
 
 ```sh
 npm run check
@@ -60,7 +59,6 @@ npm test
 
 ## Design and reading features
 
-- Language switching preserves the current chapter section when the translated outline matches; otherwise it opens the chapter start.
 - Editorial homepage with an animated agent loop and all 10 chapters.
 - The loop supports pause/play, manual steps, reduced motion, and off-screen suspension.
 - Chapter reader with book navigation and an active section outline.
@@ -76,14 +74,14 @@ npm test
 - Highlights and plain-text notes save in IndexedDB on this browser, with JSON backup export/import.
 - Choose Add note on a selection or click a highlight to edit it. Save note commits
   the note; unfinished drafts are stored separately and restored after closing or reloading.
-- Backups include notes and drafts for the current edition only. Import into the same language edition. Older highlight-only backups still import;
+- Backups include your notes and drafts. Older highlight-only backups still import;
   conflicting notes are kept as separate entries rather than overwritten.
 - Fonts are self-hosted. No accounts or external font requests.
 
 Theme, text size, and reading position stay in browser local storage. Reading
-position uses a section and relative offset for each language edition. The homepage
+position uses a section and relative offset. The homepage
 offers Continue reading; the most recently read enabled chapter is resumed; normal chapter links start normally and section links
-take precedence. A reminder on the chapter page can resume your previous position. Highlights are scoped to this book, language,
+take precedence. A reminder on the chapter page can resume your previous position. Highlights are scoped to this book
 and chapter; clearing site data removes them, and private browsing may discard
 them on exit. They do not sync across devices or site origins. Export a backup
 before switching browsers or moving from localhost to a hosted preview.
@@ -96,11 +94,13 @@ JavaScript; enhanced controls are shown when their scripts initialize.
 
 ## Source boundaries
 
-Each chapter route imports its tracked Markdown directly from the corresponding
-`book/` or `book-*/` directory. Shared `Home.astro` and `Reader.astro` components
-render the editions. `src/lib/editions.json` defines routes, source directories,
-PDF suffixes, and text direction; `src/lib/locales/<locale>.json` contains interface
-text. The browser receives only the current edition’s interface dictionary. `src/lib/book.ts` reads chapter titles through Vite's raw imports.
+Each chapter route imports its tracked Markdown directly from `book/`. Shared
+`Home.astro` and `Reader.astro` components render the pages.
+`src/lib/editions.json` defines the route, source directory, PDF suffix, and text
+direction (it is a one-entry table now, kept because the router and the homepage
+hook read it); `src/lib/locales/zh-CN.json` contains interface text, which the
+browser receives as an inline JSON block. `src/lib/book.ts` reads chapter titles
+through Vite's raw imports.
 There is no second editable copy of the book text.
 
 `src/lib/book-markdown.mjs` adapts the web rendering: it removes the duplicated
@@ -109,27 +109,21 @@ and relative page links. Astro's unified Markdown processor preserves GFM tables
 footnotes, and highlighted code. Chapters 1–10 render code, footnotes, and math with KaTeX; print-only figure sizing is omitted. Chapter 10 highlights its action-flow transcript, Python examples, and JavaScript workflow without rewriting the source snippets.
 
 `npm run dev` and `npm run build` copy Chapters 1–10’s referenced images
-(1,679 total: 112 per edition, except Spanish, whose source has 111) into ignored generated public directories. Rerun the
+(112 in the Chinese edition) into ignored generated public directories. Rerun the
 command when source images change. Figure 1-1 is generated with a taller web layout
 and wrapping labels, preserving all 18 labels from each source SVG. Its XHTML
 labels target modern browsers; the tracked SVG remains the portable PDF/MkDocs
 source. Figure 2-1 also uses a web-only layout with wrapping labels and a separate context brace to prevent overlaps. All 19 source labels are retained. All originals are copied unchanged; presentation variants are generated separately. This rendering pipeline preserves the original Markdown and assets; MkDocs
 configuration, the PDF pipeline, and root dependencies are unchanged.
 
-The existing repository license applies. The book is by Bojie Li; translation
-credits and source history remain available in `docs/en/README.md` and Git.
+The existing repository license applies. The book is by Bojie Li; source history
+remains available in Git.
 
 ## Prototype limits
 
-- All 15 maintained source editions cover the homepage and all ten chapters. Search is not implemented yet.
-- The same 21 optional machine-translation languages as MkDocs are available from English.
-  They are clearly marked as unvetted. The pinned third-party script and service load
-  only after selection; failures leave the source readable. Code and figures remain
-  English, and annotations are disabled in machine-translated views. New interface
-  translations still need native-speaker editorial review.
-- Explicit language URLs are authoritative; no automatic language redirects.
-- Arabic and Hebrew use right-to-left layouts; code and diagram coordinates remain
-  left-to-right. Non-Latin typography uses system font fallbacks and can vary by OS.
+- The Chinese edition covers the homepage and all ten chapters. Search is not implemented yet.
+- The machine-translation tier (21 optional languages, loaded from a third-party
+  script) was removed along with the other editions.
 - Astro pages retain `noindex, nofollow`; the existing MkDocs site remains available to search engines.
 
 ## Figure review
@@ -155,33 +149,27 @@ A source-content review found issues to reconcile separately before presenting
 this as a revised edition. These are in the existing SVGs, which this prototype
 copies unchanged:
 
-- `book-en/images/fig1-3.svg` describes the reasoning-history ablation as
+- `book/images/fig1-3.svg` describes the reasoning-history ablation as
   “Inconsistent decisions.” The adjacent prose says dropping reconstructible
   reasoning history costs almost nothing.
-- `book-en/images/fig1-4.svg` labels trajectory as the complete LLM input, while
+- `book/images/fig1-4.svg` labels trajectory as the complete LLM input, while
   the prose defines context as static prefix plus trajectory. Its three-quarter
   example is also labeled annual revenue, and its displayed rounded arithmetic
   does not produce the precise reported total.
 
-### Chapter 2 English visual replacements
-
-Nine new assets in `public/figures/chapter2-en/` replace figures 2-7, 2-9, 2-10, and 2-12 through 2-17 in the English Astro reader only. The Markdown image references and original `book-en/images` files remain unchanged. Each replacement caption links to the original copied asset. Other editions continue to use their original localized figures.
-
-The new SVGs use wrapping XHTML text for browser layout. Figure 2-7 embeds the original PNG bytes and adds magnified viewports without regenerating experimental data. Cache diagrams distinguish reuse from free or permanent storage. Figure 2-16 keeps the recorded results and explains that the experiment’s logged character ratio includes formatting and excludes later windowed history compression (see `chapter2/context-compression/run_all_strategies.py` and `agent.py`). These SVGs are web assets; the existing PDF pipeline continues to use the originals.
-
 ### Shared diagram style across Chapters 1–10
 
-`figure-style.mjs` defines the common slate/blue palette, surfaces, rounded boxes, and connectors for both themes. `prepare-assets.mjs` generates light/dark presentation variants for all referenced chapter figures across all 15 editions under ignored `public/figures/book/`. Source labels and geometry are preserved, using the existing reflowed layouts for figures 1-1 and 2-1 and the authored English Chapter 2 replacements where available. Experimental heatmap cell colors and embedded raster data are protected.
+`figure-style.mjs` defines the common slate/blue palette, surfaces, rounded boxes, and connectors for both themes. `prepare-assets.mjs` generates light/dark presentation variants for all referenced chapter figures under ignored `public/figures/book/`. Source labels and geometry are preserved, using the existing reflowed layouts for figures 1-1 and 2-1. Experimental heatmap cell colors and embedded raster data are protected.
 
 Original source URLs now always serve byte-for-byte originals, including figures 1-1 and 2-1. Each rendered caption has a localized original-figure link. The reader switches image variants with its theme, including the expanded viewer. Raster figures retain their pixels inside a matching frame. To change the design, edit the shared palette rather than editing the original artwork.
 
 All four Chapter 4 diagrams use `scripts/tool-protocol-layout.mjs` and `scripts/tool-cache-layout.mjs`, sharing Chapter 3’s 1000-unit canvas and 14–20px typography. The MCP sequence separates request labels, arrows, and response details; hierarchical search gives tool identifiers wider cards. Cache comparisons reserve separate space for token counts, and trajectory annotations have dedicated connector gutters. Layouts wrap each translation while preserving source labels, protocol directions, and cache relationships. Raw SVGs remain unchanged for MkDocs, PDF, and the source-figure links.
 
-Chapter 5’s figures use the `coding-core-layout`, `coding-comparison-layout`, `coding-production-layout`, and `coding-application-layout` scripts. They share the 1000-unit canvas and 14–20px font hierarchy, give code examples room to wrap, and reserve separate lanes for arrows and feedback labels. Source text, relationships, and raw SVGs are preserved. The Spanish Chapter 5 source omits Figure 5-11; the reader preserves that source difference. Chapter 5’s tool-call walkthrough uses the shared transcript highlighting, while its side-by-side reasoning comparison retains plain text to preserve column alignment.
+Chapter 5’s figures use the `coding-core-layout`, `coding-comparison-layout`, `coding-production-layout`, and `coding-application-layout` scripts. They share the 1000-unit canvas and 14–20px font hierarchy, give code examples room to wrap, and reserve separate lanes for arrows and feedback labels. Source text, relationships, and raw SVGs are preserved. Chapter 5’s tool-call walkthrough uses the shared transcript highlighting, while its side-by-side reasoning comparison retains plain text to preserve column alignment.
 
-Chapter 6 highlights JSON event envelopes and localized event traces, element listings, and action sequences. Teaching traces wrap by default and retain their original text for copying. All 14 figures per edition use `async-architecture-layout.mjs`, `voice-architecture-layout.mjs`, and `computer-use-layout.mjs`, with the shared 1000-unit canvas and 14–20px type hierarchy. Measured labels, separate connector gutters, and external feedback routes keep translated diagrams readable. The latency charts retain their source values and trends; screenshot annotations keep IDs clear of controls. Light/dark variants link to the unchanged source SVGs.
+Chapter 6 highlights JSON event envelopes and localized event traces, element listings, and action sequences. Teaching traces wrap by default and retain their original text for copying. All 14 figures use `async-architecture-layout.mjs`, `voice-architecture-layout.mjs`, and `computer-use-layout.mjs`, with the shared 1000-unit canvas and 14–20px type hierarchy. Measured labels, separate connector gutters, and external feedback routes keep translated diagrams readable. The latency charts retain their source values and trends; screenshot annotations keep IDs clear of controls. Light/dark variants link to the unchanged source SVGs.
 
-Chapter 7 uses native JSONC, YAML, and Python highlighting for task definitions, rubrics, and statistical examples. Its two source-sensitive evaluation traces use a lightweight grammar that emphasizes labels, protected strings, comments, and data flow while preserving the original text. All 10 figures per edition share the 1000-unit canvas and 14–20px typography used by Chapters 3–6. The evaluation layouts measure translated labels, separate opposing arrows, preserve nested trace operations, and keep feedback paths outside panels. Scoring tables retain their dimension/value associations, while Elo formulas and simulation-fidelity data remain faithful to the source. Both themes link to the unchanged source SVGs.
+Chapter 7 uses native JSONC, YAML, and Python highlighting for task definitions, rubrics, and statistical examples. Its two source-sensitive evaluation traces use a lightweight grammar that emphasizes labels, protected strings, comments, and data flow while preserving the original text. All 10 figures share the 1000-unit canvas and 14–20px typography used by Chapters 3–6. The evaluation layouts measure translated labels, separate opposing arrows, preserve nested trace operations, and keep feedback paths outside panels. Scoring tables retain their dimension/value associations, while Elo formulas and simulation-fidelity data remain faithful to the source. Both themes link to the unchanged source SVGs.
 
 Figure 7-2 uses a wider web layout so translated comparison headings have room to wrap and the bidirectional user/agent arrows remain clear of both boxes. All 23 source labels are preserved; the tracked SVGs and original-figure links remain unchanged.
 
@@ -193,7 +181,7 @@ The remaining Chapter 7 figures also use generated web layouts: 7-1 separates it
 
 ### Chapter 8: model post-training
 
-Chapter 8 uses the maintained Markdown in all 15 editions, with native Python highlighting for its five teaching examples, KaTeX equations, source footnotes, and the existing reading, highlighting, and note controls. The original Markdown and SVGs remain the MkDocs/PDF sources.
+Chapter 8 uses the maintained Markdown, the only edition, with native Python highlighting for its five teaching examples, KaTeX equations, source footnotes, and the existing reading, highlighting, and note controls. The original Markdown and SVGs remain the MkDocs/PDF sources.
 
 Figure 8-2 separates its five state transitions from their action labels with right-angle connectors and wrapping text slots. All 13 localized labels, the terminal reward, and the original five-state graph are preserved in both themes; the raw SVGs remain unchanged.
 
@@ -207,17 +195,17 @@ Figures 8-14 through 8-18 use dedicated wrapping layouts: the turn comparison ha
 
 The generated web figures share the book's light/dark palette. Figures 8-4, 8-7, 8-9, 8-10, and 8-16 use wrapping layouts to separate equations, stage labels, and connectors while retaining every localized source label. Figure 8-3 keeps its original grid cells, numeric values, direction arrows, and grayscale encoding together; only its explanatory key is reflowed. Data-bearing SVG groups are protected from palette conversion.
 
-Figure 8-13 is a content correction in the web presentation: the Simplified Chinese figure and chapter describe 16 isolated SWE-bench rollouts with four passing, but the other 14 editions still contain an older four-candidate arithmetic example. `scripts/grpo-rollouts-figure.mjs` supplies a localized, explicitly hypothetical 16-rollout diagram in all editions, following the current Chinese source and preserving its pass positions, reward values, and group mean. Every original remains available through its original-image link.
+Figure 8-13 is a content correction in the web presentation: the Chinese figure and chapter describe 16 isolated SWE-bench rollouts with four passing, while the source SVG still contains an older four-candidate arithmetic example (as did the removed translations). `scripts/grpo-rollouts-figure.mjs` supplies an explicitly hypothetical 16-rollout diagram following the current Chinese source and preserving its pass positions, reward values, and group mean. The original remains available through its original-image link.
 
 ### Chapter 9: continual evolution of agents
 
-Chapter 9 reads the maintained Markdown directly in all 15 editions, including its three comparison tables, 25 source footnotes, and existing highlighting and note controls. It contains no fenced code examples. Chapter 8 links forward to the local Chapter 9, which continues to the local Chapter 10.
+Chapter 9 reads the maintained Markdown directly, the only edition, including its three comparison tables, 25 source footnotes, and existing highlighting and note controls. It contains no fenced code examples. Chapter 8 links forward to the local Chapter 9, which continues to the local Chapter 10.
 
 All five figures use generated wrapping layouts in the shared light/dark style. The overall evolution and experience-to-knowledge flows reserve space for feedback connectors. The trajectory-verification diagram retains the outcome/process/quality hierarchy, while the four update methods remain complementary choices. The deployment diagram separates online execution from offline candidate generation and verification, with a distinct release path and trust boundary. Localized labels and original SVGs are preserved; original-figure links continue to serve unchanged source files.
 
 ### Chapter 10: multi-agent collaboration
 
-The final chapter reads the maintained Markdown in all 15 editions, including four tables, five highlighted code/flow examples, and each edition’s source footnotes (14 in most editions; 15 in Hungarian). Chapter 9 links to the local Chapter 10, and the final reader navigation returns to the edition’s homepage contents instead of linking to a nonexistent next chapter.
+The final chapter reads the maintained Markdown, the only edition, including four tables, five highlighted code/flow examples, and the chapter’s source footnotes (14 in most editions; 15 in Hungarian). Chapter 9 links to the local Chapter 10, and the final reader navigation returns to the edition’s homepage contents instead of linking to a nonexistent next chapter.
 
 All 11 diagrams use generated wrapping layouts in the shared light/dark palette, preserving the localized source labels and original SVG files. Context boundaries, private and shared workspaces, reviewer feedback, sequential and parallel delegation, and society/game information flows retain their distinct relationships. Figure 10-2 also adds the missing mount connector to the shared workspace, matching the four mounted areas described in the chapter. The original-image links continue to serve the untouched source assets.
 
@@ -225,6 +213,6 @@ Figures 2-2, 2-3, and 2-4 use `scripts/context-flow-figures.mjs` to give connect
 
 Figures 2-5, 2-8, and 2-11 share the context-flow arrow treatment: wider stage gaps, a continuous dashed tool-result return path, and dedicated wrapping regions for connector captions. These web-only adjustments preserve all source labels and raw SVGs.
 
-Figure 1-4 uses `scripts/trajectory-figure.mjs` for a three-round message timeline, roomier example cards, and aligned trajectory and key-feature panels. The generated layout retains all 29 source labels and numerical examples in every edition; raw diagrams remain unchanged.
+Figure 1-4 uses `scripts/trajectory-figure.mjs` for a three-round message timeline, roomier example cards, and aligned trajectory and key-feature panels. The generated layout retains all 29 source labels and numerical examples; raw diagrams remain unchanged.
 
 Chapter 3 Figures 3-1, 3-3, 3-4, 3-5, 3-7, and 3-9 through 3-15 use web layouts in `memory-foundation-layout.mjs`, `retrieval-structure-layout.mjs`, and `retrieval-workflow-layout.mjs`. The shared `chapter3-figure-kit.mjs` gives these diagrams a consistent 1000-unit canvas, readable 14–20px typography, wrapping text, and padding sized for each translation. Code examples no longer shrink to fit narrow boxes. Smaller arrowheads, clear endpoints, and separate return lanes preserve the flows; tree and graph relationships retain their source semantics. Each translated source label remains traceable through `data-source-label`, and a standalone arrow glyph in Figure 3-14 becomes a vector connector. Raw diagrams remain unchanged and available through the source-figure links.

@@ -40,7 +40,7 @@ const renderedLabels = (source) =>
   }));
 
 test('Chapter 9 evolution-flow layouts retain every localized label in both themes', () => {
-  assert.equal(Object.keys(editions).length, 15);
+  assert.equal(Object.keys(editions).length, 1);
   for (const { directory } of Object.values(editions))
     for (const [number, { layout, canvas }] of Object.entries(figures)) {
       const source = readFileSync(
@@ -88,7 +88,7 @@ test('Chapter 9 evolution-flow layouts retain every localized label in both them
 test('Chapter 9 evolution-flow layouts reject source structure drift', () => {
   for (const [number, { layout }] of Object.entries(figures)) {
     const source = readFileSync(
-      new URL(`../../book-en/images/fig9-${number}.svg`, import.meta.url),
+      new URL(`../../book/images/fig9-${number}.svg`, import.meta.url),
       'utf8',
     );
     assert.throws(
@@ -104,7 +104,7 @@ test('Chapter 9 evolution-flow layouts reject source structure drift', () => {
 
 test('Figure 9-1 preserves five stages and the verified-release feedback edge', () => {
   const source = readFileSync(
-    new URL('../../book-en/images/fig9-1.svg', import.meta.url),
+    new URL('../../book/images/fig9-1.svg', import.meta.url),
     'utf8',
   );
   const layout = layoutEvolutionLoop(source);
@@ -115,7 +115,7 @@ test('Figure 9-1 preserves five stages and the verified-release feedback edge', 
 
 test('Figure 9-4 preserves the evidence pipeline and knowledge-revision loop', () => {
   const source = readFileSync(
-    new URL('../../book-en/images/fig9-4.svg', import.meta.url),
+    new URL('../../book/images/fig9-4.svg', import.meta.url),
     'utf8',
   );
   const layout = layoutExperienceKnowledge(source);
@@ -126,7 +126,7 @@ test('Figure 9-4 preserves the evidence pipeline and knowledge-revision loop', (
 
 test('Figure 9-5 keeps online execution and offline deployment as separate loops', () => {
   const source = readFileSync(
-    new URL('../../book-en/images/fig9-5.svg', import.meta.url),
+    new URL('../../book/images/fig9-5.svg', import.meta.url),
     'utf8',
   );
   const layout = layoutEvolutionDeployment(source);
@@ -141,7 +141,7 @@ test('Figure 9-5 keeps online execution and offline deployment as separate loops
 test('Evolution-flow layouts reserve wrapping text zones and arrow gutters', () => {
   for (const [number, { layout }] of Object.entries(figures)) {
     const source = readFileSync(
-      new URL(`../../book-en/images/fig9-${number}.svg`, import.meta.url),
+      new URL(`../../book/images/fig9-${number}.svg`, import.meta.url),
       'utf8',
     );
     const result = layout(source);

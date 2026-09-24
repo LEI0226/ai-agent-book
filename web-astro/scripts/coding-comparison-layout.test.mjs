@@ -25,8 +25,8 @@ const source = (directory, figure) =>
     'utf8',
   );
 
-test('coding comparisons preserve all labels and readable type in 15 editions', () => {
-  assert.equal(Object.keys(editions).length, 15);
+test('coding comparisons preserve all labels and readable type', () => {
+  assert.equal(Object.keys(editions).length, 1);
   for (const { directory, dir } of Object.values(editions))
     for (const figure of [3, 4]) {
       const input = source(directory, figure);
@@ -89,7 +89,7 @@ test('coding comparisons preserve all labels and readable type in 15 editions', 
 });
 
 test('search comparison keeps four independent methods and ordered code rows', () => {
-  const result = layoutCodingComparison(source('book-en', 3), 3);
+  const result = layoutCodingComparison(source('book', 3), 3);
   assert.equal((result.match(/data-search-method=/g) || []).length, 4);
   assert.equal((result.match(/data-code-kind="query"/g) || []).length, 4);
   assert.equal((result.match(/data-code-kind="result"/g) || []).length, 4);
@@ -117,12 +117,14 @@ test('search comparison keeps four independent methods and ordered code rows', (
 });
 
 test('editing comparison keeps five methods, blank code rows, and adoption ranking', () => {
-  const result = layoutCodingComparison(source('book-en', 4), 4);
+  const result = layoutCodingComparison(source('book', 4), 4);
   assert.equal((result.match(/data-editing-method=/g) || []).length, 5);
   assert.equal((result.match(/data-method-code=/g) || []).length, 26);
+  // Label 21 in the Chinese manuscript (27 in the English edition this test
+  // used to read).
   assert.match(
     result,
-    /data-method-code="2:3">[\s\S]*?<span data-source-label="27"><\/span>/,
+    /data-method-code="2:3">[\s\S]*?<span data-source-label="21"><\/span>/,
   );
   assert.deepEqual(
     [
@@ -140,13 +142,13 @@ test('editing comparison keeps five methods, blank code rows, and adoption ranki
 
 test('coding comparisons reject unsupported figures and source drift', () => {
   assert.throws(
-    () => layoutCodingComparison(source('book-en', 3), 2),
+    () => layoutCodingComparison(source('book', 3), 2),
     /Unsupported coding comparison figure/,
   );
   assert.throws(
     () =>
       layoutCodingComparison(
-        source('book-en', 3).replace(/<rect\b[^>]*\/>/, ''),
+        source('book', 3).replace(/<rect\b[^>]*\/>/, ''),
         3,
       ),
     /Figure 5-3 source structure changed/,
@@ -154,7 +156,7 @@ test('coding comparisons reject unsupported figures and source drift', () => {
   assert.throws(
     () =>
       layoutCodingComparison(
-        source('book-en', 4).replace(
+        source('book', 4).replace(
           '</svg>',
           '<text x="0" y="0">unexpected</text><text x="0" y="0">second unexpected</text></svg>',
         ),

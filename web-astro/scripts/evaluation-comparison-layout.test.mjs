@@ -53,8 +53,8 @@ function assertBounds(result, context) {
   }
 }
 
-test('comparison layouts preserve all labels, readable type, and bounds in 15 editions', () => {
-  assert.equal(Object.keys(editions).length, 15);
+test('comparison layouts preserve all labels, readable type, and bounds', () => {
+  assert.equal(Object.keys(editions).length, 1);
   for (const { directory, dir } of Object.values(editions))
     for (const [figure, layout] of Object.entries(figures)) {
       const input = source(directory, figure);
@@ -202,18 +202,18 @@ test('comparison layouts reject unreviewed source variants', () => {
   assert.throws(
     () =>
       layoutVerificationSpectrum(
-        source('book-en', 4).replace(/<rect\b[^>]*\/>/, ''),
+        source('book', 4).replace(/<rect\b[^>]*\/>/, ''),
       ),
     /Figure 7-4 source structure changed/,
   );
   assert.throws(
-    () => layoutPairwise(source('book-en', 6).replace(/<line\b[^>]*\/>/, '')),
+    () => layoutPairwise(source('book', 6).replace(/<line\b[^>]*\/>/, '')),
     /Figure 7-6 source structure changed/,
   );
   assert.throws(
     () =>
       layoutSimulationFidelity(
-        source('book-en', 9).replace(/<circle\b[^>]*\/>/, ''),
+        source('book', 9).replace(/<circle\b[^>]*\/>/, ''),
       ),
     /Figure 7-9 source structure changed/,
   );

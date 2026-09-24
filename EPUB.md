@@ -1,35 +1,19 @@
-# Build the EPUB editions
+# Build the EPUB edition
 
-The repository can build EPUB 3 editions for Simplified Chinese, Traditional Chinese (Taiwan), English, Spanish, Indonesian, Arabic, Russian, Tamil, Vietnamese, Japanese, Turkish, Korean, and Hungarian from the same Markdown sources used by the PDF editions. Arabic EPUBs use RTL page progression while preserving LTR layout for code and mathematics.
+The repository builds an EPUB 3 edition from the same Markdown sources used by the PDF. (It used to build 15 language editions; the community translations were removed, so only the Chinese original is produced now.)
 
-Install [Pandoc](https://pandoc.org/), Poppler (`pdftoppm`), and optionally [EPUBCheck](https://www.w3.org/publishing/epubcheck/). The builder uses each PDF's first page as the corresponding EPUB cover. When EPUBCheck is available, the builder validates every generated book.
+Install [Pandoc](https://pandoc.org/), Poppler (`pdftoppm`), and optionally [EPUBCheck](https://www.w3.org/publishing/epubcheck/). The builder uses the PDF's first page as the EPUB cover. When EPUBCheck is available, the builder validates the generated book.
 
-Build every language from the repository root:
-
-```bash
-./build_epub.sh
-```
-
-Build one language by passing its language code:
+Build from the repository root:
 
 ```bash
-./build_epub.sh zh-CN
-./build_epub.sh zh-TW
-./build_epub.sh en
-./build_epub.sh es
-./build_epub.sh id
-./build_epub.sh ar
-./build_epub.sh ru
-./build_epub.sh ta
-./build_epub.sh vi
-./build_epub.sh tr
-./build_epub.sh ja
-./build_epub.sh ko
-./build_epub.sh hu
+./build_epub.sh          # or: ./build_epub.sh zh-CN
 ```
 
-Note: `./build_epub.sh` (no argument, i.e. `all`) does **not** yet include Japanese
-or Arabic while their PDF pipelines are being validated. Build them explicitly
-with `./build_epub.sh ja` or `./build_epub.sh ar`.
+The PDF must be built first — the cover comes from its first page:
 
-The builder writes each `.epub` beside its language's PDF. Generated EPUB files are ignored by Git.
+```bash
+cd book && bash build_pdf.sh
+```
+
+The builder writes `深入理解-AI-Agent-李博杰-v2.0.epub` next to the PDF in `book/`. Generated EPUB files are ignored by Git.

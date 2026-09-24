@@ -12,7 +12,7 @@ interface Props {
 }
 const {
   title,
-  locale = 'en',
+  locale = 'zh-CN',
   description = 'An open-source book on the design principles and engineering practice of AI agents.',
   reader = false,
 } = Astro.props;
@@ -45,10 +45,6 @@ const t = translator(locale);
   <body class:list={[{ 'reader-page': reader }]}>
     <a class="skip-link" href="#main-content">{t('Skip to content')}</a>
     <slot />
-    <script>
-      import { initMachineTranslation } from '../scripts/machine-translation';
-      initMachineTranslation();
-    </script>
     <script
       is:inline
       id="book-ui-messages"

@@ -7,12 +7,11 @@ import { getBook, repo } from '../lib/book';
 import { translator, editions, type Locale } from '../lib/i18n';
 import type { MarkdownInstance } from 'astro';
 interface Props {
-  sectionLinks: Record<string, Record<string, string>>;
   chapterNumber: number;
   locale: Locale;
   chapter: MarkdownInstance<Record<string, unknown>>;
 }
-const { locale, chapter, sectionLinks, chapterNumber } = Astro.props;
+const { locale, chapter, chapterNumber } = Astro.props;
 const { Content, getHeadings } = chapter;
 const t = translator(locale);
 const edition = editions[locale];
@@ -33,12 +32,6 @@ const outline = getHeadings().filter(
   reader
 >
   <Header locale={locale} reader chapterNumber={chapterNumber} />
-  <script
-    is:inline
-    id="section-language-links"
-    type="application/json"
-    set:html={JSON.stringify(sectionLinks).replaceAll('<', '\\u003c')}
-  />
   <div class="reading-progress" aria-hidden="true">
     <div id="reading-progress-bar"></div>
   </div>
@@ -544,15 +537,6 @@ const outline = getHeadings().filter(
       document.getElementById(decodeURIComponent(link.hash.slice(1))),
     );
     let ticking = false;
-    const languageSections: Record<string, Record<string, string>> = JSON.parse(
-      document.getElementById('section-language-links')?.textContent ?? '{}',
-    );
-    const languageLinks = Array.from(
-      document.querySelectorAll<HTMLAnchorElement>('.language-picker a'),
-    );
-    const machineLanguageLinks = Array.from(
-      document.querySelectorAll<HTMLAnchorElement>('[data-machine-language]'),
-    );
     const dialogLinks = Array.from(
       document.querySelectorAll<HTMLAnchorElement>('.dialog-outline a'),
     );
@@ -588,24 +572,6 @@ const outline = getHeadings().filter(
           decodeURIComponent(link.hash.slice(1)) === sections[active]?.id;
         if (selected) link.setAttribute('aria-current', 'location');
         else link.removeAttribute('aria-current');
-      });
-      languageLinks.forEach((link) => {
-        const slug =
-          active >= 0
-            ? languageSections[sections[active]?.id ?? '']?.[link.lang]
-            : undefined;
-        const url = new URL(link.href);
-        url.hash = slug ?? '';
-        link.href = url.href;
-      });
-      machineLanguageLinks.forEach((link) => {
-        const slug =
-          active >= 0
-            ? languageSections[sections[active]?.id ?? '']?.en
-            : undefined;
-        const url = new URL(link.href);
-        url.hash = slug ?? '';
-        link.href = url.href;
       });
       ticking = false;
     };

@@ -53,7 +53,7 @@ function renderedLabels(source) {
   }));
 }
 
-function source(number, directory = 'book-en') {
+function source(number, directory = 'book') {
   return readFileSync(
     new URL(`../../${directory}/images/fig10-${number}.svg`, import.meta.url),
     'utf8',
@@ -149,7 +149,7 @@ const figures = {
 };
 
 test('Chapter 10 manager layouts retain every localized label in both themes', () => {
-  assert.equal(Object.keys(editions).length, 15);
+  assert.equal(Object.keys(editions).length, 1);
   for (const { directory } of Object.values(editions))
     for (const [number, { layout, labels: expectedCount }] of Object.entries(
       figures,

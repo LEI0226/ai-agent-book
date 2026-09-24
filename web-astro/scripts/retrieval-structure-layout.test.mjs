@@ -28,7 +28,7 @@ const readFigure = (directory, figure) =>
   );
 
 test('retrieval structure layouts preserve every localized source label once', () => {
-  assert.equal(Object.keys(editions).length, 15);
+  assert.equal(Object.keys(editions).length, 1);
   for (const edition of Object.values(editions))
     for (const figure of [9, 10, 11, 12]) {
       const source = readFigure(edition.directory, figure);
@@ -53,35 +53,23 @@ test('retrieval structure layouts preserve every localized source label once', (
     }
 });
 
-test('hybrid retrieval supports compact and extended source variants', () => {
-  const compact = layoutRetrievalStructure(readFigure('book-ja', 9), 9);
-  const extended = layoutRetrievalStructure(readFigure('book-en', 9), 9);
-  const arabic = layoutRetrievalStructure(readFigure('book-ar', 9), 9, {
-    rtl: true,
-  });
-  assert.match(compact, /data-variant="compact"/);
-  assert.doesNotMatch(compact, /data-retrieval-stage="reranker"/);
+test('hybrid retrieval renders the extended source variant', () => {
+  // This used to cover three editions at once: the compact variant was read
+  // from the Japanese edition, the extended one from the English edition, and
+  // the RTL label split from the Arabic edition. Only the Chinese edition
+  // remains, and its figure 3-9 is the extended variant (25 labels; the compact
+  // variant had 21), so the compact/RTL halves no longer have a source.
+  const extended = layoutRetrievalStructure(readFigure('book', 9), 9);
   assert.match(extended, /data-variant="extended"/);
   assert.match(extended, /data-retrieval-stage="reranker"/);
   assert.match(extended, /data-retrieval-stage="final-ranking"/);
-  assert.equal((compact.match(/data-source-label=/g) || []).length, 21);
   assert.equal((extended.match(/data-source-label=/g) || []).length, 25);
   assert.match(extended, /d="M200 [\d.]+ L232 [\d.]+"/);
   assert.match(extended, /d="M696 [\d.]+ L728 [\d.]+"/);
-  for (const index of [1, 4, 6, 8, 13, 15, 17])
-    assert.match(
-      arabic,
-      new RegExp(`dir="rtl"[^>]*><span data-source-label="${index}"`),
-    );
-  for (const index of [5, 7, 9, 14, 16, 18, 21])
-    assert.match(
-      arabic,
-      new RegExp(`dir="ltr"[^>]*><span data-source-label="${index}"`),
-    );
 });
 
 test('recursive abstraction keeps all ten tree connectors directionless', () => {
-  for (const directory of ['book-en', 'book-es']) {
+  for (const directory of ['book']) {
     const result = layoutRetrievalStructure(readFigure(directory, 10), 10);
     assert.match(result, /data-tree-connectors="directionless"/);
     assert.equal(
@@ -115,7 +103,7 @@ test('recursive abstraction keeps all ten tree connectors directionless', () => 
 });
 
 test('agentic comparison leaves a readable loop gutter', () => {
-  const result = layoutRetrievalStructure(readFigure('book-en', 12), 12);
+  const result = layoutRetrievalStructure(readFigure('book', 12), 12);
   assert.match(result, /M896 [\d.]+ L968 [\d.]+ L968 [\d.]+ L896 [\d.]+/);
   assert.match(result, /x="898" y="[\d.]+" width="62" height="[\d.]+"/);
   assert.match(result, /font-size:14px/);
@@ -126,13 +114,13 @@ test('agentic comparison leaves a readable loop gutter', () => {
 
 test('retrieval structure layouts reject unsupported figures and source drift', () => {
   assert.throws(
-    () => layoutRetrievalStructure(readFigure('book-en', 9), 8),
+    () => layoutRetrievalStructure(readFigure('book', 9), 8),
     /Unsupported retrieval structure figure/,
   );
   assert.throws(
     () =>
       layoutRetrievalStructure(
-        readFigure('book-en', 11).replace(/<line\b[^>]*\/>/, ''),
+        readFigure('book', 11).replace(/<line\b[^>]*\/>/, ''),
         11,
       ),
     /Figure 3-11 source structure changed/,

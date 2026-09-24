@@ -187,7 +187,10 @@ def test_every_figure_in_every_edition_carries_its_number_in_the_alt_text():
             if not FIGURE_LABEL.search(match.group("alt")):
                 unlabelled.append(f"{path.relative_to(ROOT)}: {match.group('alt')}")
 
-    assert total > 1000, f"expected every edition's figures, found only {total}"
+    # A floor, not a target: it catches the scan silently finding nothing (or
+    # one edition's worth instead of all of them). It used to be 1000 when the
+    # repository shipped 15 translated editions; only the Chinese one remains.
+    assert total > 100, f"expected the book's figures, found only {total}"
     assert not unlabelled, "figures without a number in their alt text:\n" + "\n".join(
         unlabelled[:20]
     )

@@ -49,8 +49,8 @@ function edges(svg) {
   }));
 }
 
-test('coding-production layouts preserve all source labels at readable sizes in all 15 editions', () => {
-  assert.equal(Object.keys(editions).length, 15);
+test('coding-production layouts preserve all source labels at readable sizes in the single edition', () => {
+  assert.equal(Object.keys(editions).length, 1);
   for (const { directory, dir } of Object.values(editions))
     for (const figure of [5, 6, 7]) {
       const source = readFigure(directory, figure);
@@ -219,7 +219,7 @@ test('Figure 5-7 makes the log-to-issue production sequence explicit', () => {
 
 test('coding-production layouts reject source drift and unsupported figures', () => {
   for (const figure of [5, 6, 7]) {
-    const source = readFigure('book-en', figure);
+    const source = readFigure('book', figure);
     assert.throws(
       () =>
         layoutCodingProduction(source.replace(/<rect\b[^>]*\/>/, ''), figure),
@@ -235,14 +235,14 @@ test('coding-production layouts reject source drift and unsupported figures', ()
     );
   }
   assert.doesNotThrow(() =>
-    layoutCodingProduction(readFigure('book-es', 7), 7),
+    layoutCodingProduction(readFigure('book', 7), 7),
   );
   assert.doesNotThrow(() =>
-    layoutCodingProduction(readFigure('book-vi', 5), 5),
+    layoutCodingProduction(readFigure('book', 5), 5),
   );
   assert.doesNotThrow(() => layoutCodingProduction(readFigure('book', 6), 6));
   assert.throws(
-    () => layoutCodingProduction(readFigure('book-en', 5), 4),
+    () => layoutCodingProduction(readFigure('book', 5), 4),
     /Unsupported coding-production figure/,
   );
 });

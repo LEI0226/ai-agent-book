@@ -106,22 +106,11 @@ for (const [locale, { directory, suffix }] of Object.entries(editions)) {
       await copyFile(original, destination);
       const bytes = await readFile(original);
       let vector;
-      const englishReplacement =
-        directory === 'book-en' &&
-        /^images\/fig2-(7|9|10|12|13|14|15|16|17)\.(svg|png)$/.exec(image);
-      if (englishReplacement) {
-        vector = await readFile(
-          new URL(
-            `../public/figures/chapter2-en/fig2-${englishReplacement[1]}-web.svg`,
-            import.meta.url,
-          ),
-          'utf8',
-        );
-      } else if (image === 'images/fig1-1.svg')
+      if (image === 'images/fig1-1.svg')
         vector = layoutAgentLoop(bytes.toString());
       else if (image === 'images/fig1-4.svg')
         vector = layoutTrajectory(bytes.toString(), {
-          rtl: ['book-ar', 'book-he'].includes(directory),
+          rtl: false,
         });
       else if (image === 'images/fig2-1.svg')
         vector = layoutContextWindow(bytes.toString());
@@ -129,32 +118,32 @@ for (const [locale, { directory, suffix }] of Object.entries(editions)) {
         vector = layoutContextFlow(
           bytes.toString(),
           Number(image.match(/fig2-(\d+)/)[1]),
-          { rtl: ['book-ar', 'book-he'].includes(directory) },
+          { rtl: false },
         );
       else if (/^images\/fig3-(1|3|4|5|7)\.svg$/.test(image))
         vector = layoutMemoryFoundation(
           bytes.toString(),
           Number(image.match(/fig3-(\d+)/)[1]),
-          { rtl: ['book-ar', 'book-he'].includes(directory) },
+          { rtl: false },
         );
       else if (/^images\/fig3-(9|10|11|12)\.svg$/.test(image))
         vector = layoutRetrievalStructure(
           bytes.toString(),
           Number(image.match(/fig3-(\d+)/)[1]),
-          { rtl: ['book-ar', 'book-he'].includes(directory) },
+          { rtl: false },
         );
       else if (/^images\/fig3-(13|14|15)\.svg$/.test(image))
         vector = layoutRetrievalWorkflow(
           bytes.toString(),
           Number(image.match(/fig3-(\d+)/)[1]),
-          { rtl: ['book-ar', 'book-he'].includes(directory) },
+          { rtl: false },
         );
       else if (/^images\/fig4-(1|2)\.svg$/.test(image))
         vector = layoutToolProtocol(
           bytes.toString(),
           Number(image.match(/fig4-(\d+)/)[1]),
           {
-            rtl: ['book-ar', 'book-he'].includes(directory),
+            rtl: false,
           },
         );
       else if (/^images\/fig4-(3|4)\.svg$/.test(image))
@@ -162,90 +151,90 @@ for (const [locale, { directory, suffix }] of Object.entries(editions)) {
           bytes.toString(),
           Number(image.match(/fig4-(\d+)/)[1]),
           {
-            rtl: ['book-ar', 'book-he'].includes(directory),
+            rtl: false,
           },
         );
       else if (/^images\/fig5-(1|2)\.svg$/.test(image))
         vector = layoutCodingCore(
           bytes.toString(),
           Number(image.match(/fig5-(\d+)/)[1]),
-          { rtl: ['book-ar', 'book-he'].includes(directory) },
+          { rtl: false },
         );
       else if (/^images\/fig5-(3|4)\.svg$/.test(image))
         vector = layoutCodingComparison(
           bytes.toString(),
           Number(image.match(/fig5-(\d+)/)[1]),
-          { rtl: ['book-ar', 'book-he'].includes(directory) },
+          { rtl: false },
         );
       else if (/^images\/fig5-(5|6|7)\.svg$/.test(image))
         vector = layoutCodingProduction(
           bytes.toString(),
           Number(image.match(/fig5-(\d+)/)[1]),
-          { rtl: ['book-ar', 'book-he'].includes(directory) },
+          { rtl: false },
         );
       else if (/^images\/fig5-(8|9|10|11)\.svg$/.test(image))
         vector = layoutCodingApplication(
           bytes.toString(),
           Number(image.match(/fig5-(\d+)/)[1]),
-          { rtl: ['book-ar', 'book-he'].includes(directory) },
+          { rtl: false },
         );
       else if (/^images\/fig6-([1-5])\.svg$/.test(image))
         vector = layoutAsyncArchitecture(
           bytes.toString(),
           Number(image.match(/fig6-(\d+)/)[1]),
-          { rtl: ['book-ar', 'book-he'].includes(directory) },
+          { rtl: false },
         );
       else if (/^images\/fig6-(6|7|8|9|10)\.svg$/.test(image))
         vector = layoutVoiceArchitecture(
           bytes.toString(),
           Number(image.match(/fig6-(\d+)/)[1]),
-          { rtl: ['book-ar', 'book-he'].includes(directory) },
+          { rtl: false },
         );
       else if (/^images\/fig6-(11|12|13|14)\.svg$/.test(image))
         vector = layoutComputerUse(
           bytes.toString(),
           Number(image.match(/fig6-(\d+)/)[1]),
-          { rtl: ['book-ar', 'book-he'].includes(directory) },
+          { rtl: false },
         );
       else if (image === 'images/fig7-2.svg')
         vector = layoutEvaluationEnvironments(bytes.toString(), {
-          rtl: ['book-ar', 'book-he'].includes(directory),
+          rtl: false,
         });
       else if (image === 'images/fig7-5.svg')
         vector = layoutLlmJudge(bytes.toString(), {
-          rtl: ['book-ar', 'book-he'].includes(directory),
+          rtl: false,
         });
       else if (image === 'images/fig7-7.svg')
         vector = layoutObservability(bytes.toString(), {
-          rtl: ['book-ar', 'book-he'].includes(directory),
+          rtl: false,
         });
       else if (image === 'images/fig7-4.svg')
         vector = layoutVerificationSpectrum(bytes.toString(), {
-          rtl: ['book-ar', 'book-he'].includes(directory),
+          rtl: false,
         });
       else if (image === 'images/fig7-9.svg')
         vector = layoutSimulationFidelity(bytes.toString(), {
-          rtl: ['book-ar', 'book-he'].includes(directory),
+          rtl: false,
         });
       else if (image === 'images/fig7-1.svg')
         vector = layoutEvaluationOverview(bytes.toString(), {
-          rtl: ['book-ar', 'book-he'].includes(directory),
+          rtl: false,
         });
       else if (image === 'images/fig7-3.svg')
         vector = layoutDualControl(bytes.toString(), {
-          rtl: ['book-ar', 'book-he'].includes(directory),
+          rtl: false,
         });
       else if (image === 'images/fig7-6.svg')
         vector = layoutPairwise(bytes.toString(), {
-          rtl: ['book-ar', 'book-he'].includes(directory),
+          rtl: false,
         });
       else if (image === 'images/fig7-8.svg')
         vector = layoutImprovementCycle(bytes.toString(), {
-          rtl: ['book-ar', 'book-he'].includes(directory),
+          rtl: false,
         });
       else if (image === 'images/fig7-10.svg')
         vector = layoutEmbodiedEvaluation(bytes.toString(), {
-          rtl: ['book-ar', 'book-he'].includes(directory),
+          rtl: false,
         });
       else if (image === 'images/fig8-1.svg')
         vector = layoutRlInteraction(bytes.toString());

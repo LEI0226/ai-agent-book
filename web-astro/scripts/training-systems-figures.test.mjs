@@ -35,7 +35,7 @@ const renderedLabels = (source) =>
   }));
 
 test('Chapter 8 training-system layouts retain every localized label in both themes', () => {
-  assert.equal(Object.keys(editions).length, 15);
+  assert.equal(Object.keys(editions).length, 1);
   for (const { directory } of Object.values(editions))
     for (const [number, { layout, labels: expectedCount }] of Object.entries(
       figures,
@@ -82,7 +82,7 @@ test('Chapter 8 training-system layouts retain every localized label in both the
 
 test('Figure 8-17 preserves the execution graph and reported training results', () => {
   const source = readFileSync(
-    new URL('../../book-en/images/fig8-17.svg', import.meta.url),
+    new URL('../../book/images/fig8-17.svg', import.meta.url),
     'utf8',
   );
   const expected = sourceLabels(source);
@@ -103,7 +103,7 @@ test('Figure 8-17 preserves the execution graph and reported training results', 
 
 test('Figure 8-18 preserves pipeline, tool groups, and rollout configuration', () => {
   const source = readFileSync(
-    new URL('../../book-en/images/fig8-18.svg', import.meta.url),
+    new URL('../../book/images/fig8-18.svg', import.meta.url),
     'utf8',
   );
   const expected = sourceLabels(source);
@@ -125,7 +125,7 @@ test('Figure 8-18 preserves pipeline, tool groups, and rollout configuration', (
 test('Training-system layouts reserve readable wrapped text zones', () => {
   const sources = [17, 18].map((number) =>
     readFileSync(
-      new URL(`../../book-en/images/fig8-${number}.svg`, import.meta.url),
+      new URL(`../../book/images/fig8-${number}.svg`, import.meta.url),
       'utf8',
     ),
   );
@@ -151,11 +151,11 @@ test('Training-system layouts reserve readable wrapped text zones', () => {
 
 test('Training-system layouts reject source structure drift', () => {
   const reward = readFileSync(
-    new URL('../../book-en/images/fig8-17.svg', import.meta.url),
+    new URL('../../book/images/fig8-17.svg', import.meta.url),
     'utf8',
   );
   const system = readFileSync(
-    new URL('../../book-en/images/fig8-18.svg', import.meta.url),
+    new URL('../../book/images/fig8-18.svg', import.meta.url),
     'utf8',
   );
   assert.throws(

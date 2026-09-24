@@ -17,7 +17,6 @@ const catalogs = import.meta.glob<Record<string, string>>('./locales/*.json', {
   import: 'default',
 });
 export function getMessages(locale: Locale): Record<string, string> {
-  if (locale === 'en') return {};
   return catalogs[`./locales/${locale}.json`] ?? {};
 }
 export function translator(locale: Locale) {

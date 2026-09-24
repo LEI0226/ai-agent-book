@@ -3,7 +3,19 @@
 
 % ── Unicode glyph fallback (Times/Courier lack these) ─────────────
 \usepackage{newunicodechar}
-\IfFontExistsTF{Arial Unicode MS}{\newfontfamily\fallbackfont{Arial Unicode MS}}{\IfFontExistsTF{Noto Sans CJK SC}{\newfontfamily\fallbackfont{Noto Sans CJK SC}}{\newfontfamily\fallbackfont{DejaVu Sans}}}
+% 符号兜底字体。Windows 上 Arial Unicode MS / Noto Sans CJK SC 都没有，此时若直接
+% 落到 DejaVu Sans，带圈字母 ⓐ (U+24D0) 会缺字（DejaVu Sans 不含 Enclosed
+% Alphanumerics；Noto Sans SC 含 ⓐ 却缺 ✗ U+2717 和 ₀ U+2080）。Segoe UI Symbol
+% 是 Windows 自带且同时覆盖这一组符号的字体，优先于 DejaVu Sans。
+\IfFontExistsTF{Arial Unicode MS}{%
+  \newfontfamily\fallbackfont{Arial Unicode MS}%
+}{\IfFontExistsTF{Noto Sans CJK SC}{%
+  \newfontfamily\fallbackfont{Noto Sans CJK SC}%
+}{\IfFontExistsTF{Segoe UI Symbol}{%
+  \newfontfamily\fallbackfont{Segoe UI Symbol}%
+}{%
+  \newfontfamily\fallbackfont{DejaVu Sans}%
+}}}
 \IfFontExistsTF{Heiti SC}{\newunicodechar{★}{{\fontspec{Heiti SC}★}}}{\IfFontExistsTF{Noto Sans CJK SC}{\newunicodechar{★}{{\fontspec{Noto Sans CJK SC}★}}}{\newunicodechar{★}{{\fontspec{DejaVu Sans}★}}}}
 \newunicodechar{✓}{{\fallbackfont ✓}}
 \newunicodechar{✗}{{\fallbackfont ✗}}
@@ -46,7 +58,15 @@
 \newunicodechar{ω}{{\fallbackfont ω}}
 
 % ── Code/monospace font (covers box-drawing glyphs used in code) ──
-\setmonofont[Scale=0.86]{Menlo}
+% Menlo 是 macOS 自带字体；Windows 上没有，按 DejaVu Sans Mono → Consolas 兜底。
+% （DejaVu 随 TeX Live 一起装，Windows 上通常已在系统字体目录里。）
+\IfFontExistsTF{Menlo}{%
+  \setmonofont[Scale=0.86]{Menlo}%
+}{\IfFontExistsTF{DejaVu Sans Mono}{%
+  \setmonofont[Scale=0.86]{DejaVu Sans Mono}%
+}{%
+  \setmonofont[Scale=0.9]{Consolas}%
+}}
 
 % ── tcolorbox (ElegantBook already loads it; just add libraries) ──
 \tcbuselibrary{skins,breakable}
@@ -137,7 +157,8 @@
 % captions were off). Render Heiti SC at nominal size (no MatchLowercase) with a
 % faux bold, so 中文 matches the Latin in captions. Injected into captions only;
 % headings and body are untouched.
-\IfFontExistsTF{Heiti SC}{\setCJKfamilyfont{capcjksf}[AutoFakeBold=2.5]{Heiti SC}}{\IfFontExistsTF{Noto Sans CJK SC}{\setCJKfamilyfont{capcjksf}[AutoFakeBold=2.5]{Noto Sans CJK SC}}{\setCJKfamilyfont{capcjksf}[AutoFakeBold=2.5]{DejaVu Sans}}}
+% 同理不用可变字体 Noto Sans SC（见下方正文中文字体的说明）
+\IfFontExistsTF{Heiti SC}{\setCJKfamilyfont{capcjksf}[AutoFakeBold=2.5]{Heiti SC}}{\IfFontExistsTF{Noto Sans CJK SC}{\setCJKfamilyfont{capcjksf}[AutoFakeBold=2.5]{Noto Sans CJK SC}}{\IfFontExistsTF{SimHei}{\setCJKfamilyfont{capcjksf}[AutoFakeBold=2.5]{SimHei}}{\setCJKfamilyfont{capcjksf}[AutoFakeBold=2.5]{DejaVu Sans}}}}
 \DeclareCaptionFont{cjkmatch}{\CJKfamily{capcjksf}}
 \captionsetup{font={normalsize,sf,bf,cjkmatch}, labelformat=empty, skip=4pt, justification=centering}
 
@@ -157,17 +178,33 @@
 % ── Inline code: keep it tight ───────────────────────────────────
 \setlength{\parindent}{2em}
 
-% 正文中文字体：本地 macOS 用 Songti SC / Heiti SC；CI（无 Apple 字体）用 Noto Sans CJK SC。
+% 正文中文字体：本地 macOS 用 Songti SC / Heiti SC；CI（无 Apple 字体）用 Noto Sans CJK SC；
+% Windows 用系统自带的 SimSun / SimHei（宋体 / 黑体）。
+%
+% ⚠️ 别把 Windows 11 自带的 "Noto Sans SC" / "Noto Serif SC" 加进来：它们是**可变字体**
+%    （NotoSansSC-VF.ttf / NotoSerifSC-VF.ttf），xdvipdfmx 处理不了，会在写 PDF 阶段直接
+%    `xdvipdfmx:fatal: Invalid font: -1 (0)`，而 TeX 侧一行报错都没有，极难排查。
+%    所以这里选静态字体。（另注意 "Noto Sans SC" 与 CI 上的 "Noto Sans CJK SC" 是两个
+%    不同的字体族：前者 Google Fonts 版，后者 Source Han 版。）
 % fontset=none 由 build_pdf.sh 传入，避免 ctex 自动选择已被移除的 ST 系列旧字体。
 \IfFontExistsTF{Songti SC}{%
   \setCJKmainfont[AutoFakeBold=2.5]{Songti SC}%
   \setCJKsansfont[AutoFakeBold=2.5]{Heiti SC}%
   \setCJKmonofont[AutoFakeBold=2.5]{Songti SC}%
-}{%
+}{\IfFontExistsTF{Noto Sans CJK SC}{%
   \setCJKmainfont[AutoFakeBold=2.5]{Noto Sans CJK SC}%
   \setCJKsansfont[AutoFakeBold=2.5]{Noto Sans CJK SC}%
   \setCJKmonofont[AutoFakeBold=2.5]{Noto Sans CJK SC}%
-}
+}{\IfFontExistsTF{SimSun}{%
+  \setCJKmainfont[AutoFakeBold=2.5]{SimSun}%
+  \setCJKsansfont[AutoFakeBold=2.5]{SimHei}%
+  \setCJKmonofont[AutoFakeBold=2.5]{SimSun}%
+}{%
+  % TeX Live 自带的 Fandol，最后的兜底
+  \setCJKmainfont[AutoFakeBold=2.5]{FandolSong}%
+  \setCJKsansfont[AutoFakeBold=2.5]{FandolHei}%
+  \setCJKmonofont[AutoFakeBold=2.5]{FandolSong}%
+}}}
 
 % ElegantBook empties the `plain` page style used on chapter-opening pages.
 % Keep those pages numbered, matching the centered footer on regular pages.

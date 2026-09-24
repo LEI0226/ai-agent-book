@@ -36,8 +36,8 @@ function boxes(svg, element) {
   }));
 }
 
-test('voice architecture layouts retain all source labels and bounds in all 15 editions', () => {
-  assert.equal(Object.keys(editions).length, 15);
+test('voice architecture layouts retain all source labels and bounds in the single edition', () => {
+  assert.equal(Object.keys(editions).length, 1);
   for (const { directory, dir } of Object.values(editions))
     for (const figure of [6, 7, 8, 9, 10]) {
       const source = readFigure(directory, figure);
@@ -233,7 +233,7 @@ test('Figure 6-10 keeps both parallel thought paths connected to the experience'
 
 test('voice architecture layouts reject source drift and unsupported figures', () => {
   for (const figure of [6, 7, 8, 9, 10]) {
-    const source = readFigure('book-en', figure);
+    const source = readFigure('book', figure);
     assert.throws(
       () =>
         layoutVoiceArchitecture(source.replace(/<rect\b[^>]*\/>/, ''), figure),
@@ -249,7 +249,7 @@ test('voice architecture layouts reject source drift and unsupported figures', (
     );
   }
   assert.throws(
-    () => layoutVoiceArchitecture(readFigure('book-en', 6), 5),
+    () => layoutVoiceArchitecture(readFigure('book', 6), 5),
     /Unsupported voice architecture figure/,
   );
 });

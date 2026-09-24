@@ -5,7 +5,7 @@ import AgentArchitecture from '../components/AgentArchitecture.astro';
 import Icon from '../components/Icon.astro';
 import { getBook, repo } from '../lib/book';
 import { translator, editions, locales, type Locale } from '../lib/i18n';
-const { locale = 'en' } = Astro.props as { locale?: Locale };
+const { locale = 'zh-CN' } = Astro.props as { locale?: Locale };
 const t = translator(locale);
 const edition = editions[locale];
 const { chapters, chapterPath } = getBook(locale);
@@ -24,29 +24,9 @@ const { chapters, chapterPath } = getBook(locale);
           {t('An open-source book')}
         </p>
         <h1 id="hero-title">
-          {
-            locale === 'en' ? (
-              <>
-                AI Agents
-                <>
-                  <br />
-                  <span class="serif-title">in Depth.</span>
-                </>
-              </>
-            ) : locale.startsWith('zh') ? (
-              <>
-                深入理解
-                <>
-                  <br />
-                  <span class="serif-title">AI Agent.</span>
-                </>
-              </>
-            ) : (
-              <span class="localized-book-title">
-                {t('AI Agents in Depth')}
-              </span>
-            )
-          }
+          深入理解
+          <br />
+          <span class="serif-title">AI Agent.</span>
         </h1>
         <p class="hero-subtitle">
           {t('Design principles.')}<br />{' '}{t('Engineering practice.')}

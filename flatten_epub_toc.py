@@ -177,17 +177,24 @@ def rewrite_epub(path, title_label, toc_label, rtl=False, language="ar"):
                         replacements.get(name, source.read(name)), language=language
                     )
 
-        directory = os.path.dirname(os.path.abspath(path))
-        descriptor, temporary_path = tempfile.mkstemp(suffix=".epub", dir=directory)
-        os.close(descriptor)
-        try:
-            with zipfile.ZipFile(temporary_path, "w") as target:
-                for info in source.infolist():
-                    target.writestr(info, replacements.get(info.filename, source.read(info.filename)))
-            os.replace(temporary_path, path)
-        except BaseException:
-            os.unlink(temporary_path)
-            raise
+        # Read every entry while the archive is open. Windows refuses to
+        # replace a file that still has an open handle, so the rewrite and the
+        # os.replace below must happen *after* this `with` exits — on Unix
+        # replacing an open file is allowed, which is why this only ever broke
+        # on Windows.
+        entries = [(info, source.read(info.filename)) for info in source.infolist()]
+
+    directory = os.path.dirname(os.path.abspath(path))
+    descriptor, temporary_path = tempfile.mkstemp(suffix=".epub", dir=directory)
+    os.close(descriptor)
+    try:
+        with zipfile.ZipFile(temporary_path, "w") as target:
+            for info, data in entries:
+                target.writestr(info, replacements.get(info.filename, data))
+        os.replace(temporary_path, path)
+    except BaseException:
+        os.unlink(temporary_path)
+        raise
 
 
 if __name__ == "__main__":

@@ -279,7 +279,6 @@ export function bookMarkdown({ base = '/' } = {}) {
 export function bookFootnotes() {
   return (tree, file) => {
     const { locale } = sourceEdition(file.path);
-    if (locale === 'en') return;
     const messages = JSON.parse(
       readFileSync(
         new URL(`./locales/${locale}.json`, import.meta.url),

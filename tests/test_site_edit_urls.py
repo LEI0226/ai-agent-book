@@ -59,10 +59,14 @@ def test_promoted_chapter_page_links_to_the_tracked_chapter_source(tmp_path: Pat
 
 
 def test_regular_page_keeps_its_own_path(tmp_path: Path):
-    page = _page("book-en/chapter9.md", tmp_path)
+    # Uses a chapter file that is not promoted to a directory index. This has
+    # to be a path that exists in the repository: `repo_relative_source()`
+    # returns None for pages with no tracked counterpart, and the assertion
+    # below is precisely that this one DOES resolve.
+    page = _page("book/chapter9.md", tmp_path)
 
     assert page.edit_url == (
-        "https://github.com/bojieli/ai-agent-book/edit/main/book-en/chapter9.md"
+        "https://github.com/bojieli/ai-agent-book/edit/main/book/chapter9.md"
     )
 
 

@@ -38,7 +38,7 @@ test('Coding core layouts retain labels and bounds in every edition', () => {
     }
 });
 test('Architecture retains its four directed connections and seven runtime tools', () => {
-  const result = layoutCodingCore(source('book-en', 1), 1);
+  const result = layoutCodingCore(source('book', 1), 1);
   for (const edge of [
     'gateway-runtime',
     'web-runtime',
@@ -55,7 +55,7 @@ test('Architecture retains its four directed connections and seven runtime tools
   assert.ok(Number(path[1]) > Number(path[2]));
 });
 test('Workflow preserves five stages and their tool groups despite translated source positions', () => {
-  for (const dir of ['book-en', 'book-vi', 'book-ja']) {
+  for (const dir of ['book']) {
     const result = layoutCodingCore(source(dir, 2), 2);
     assert.equal((result.match(/data-stage=/g) || []).length, 5);
     assert.equal((result.match(/marker-end=/g) || []).length, 4);
@@ -73,8 +73,8 @@ test('Workflow preserves five stages and their tool groups despite translated so
 });
 test('Coding core layouts fail on unknown source shapes', () => {
   assert.throws(
-    () => layoutCodingCore(source('book-en', 1).replace(/<rect[^>]+>/, ''), 1),
+    () => layoutCodingCore(source('book', 1).replace(/<rect[^>]+>/, ''), 1),
     /structure changed/,
   );
-  assert.throws(() => layoutCodingCore(source('book-en', 1), 3), /Unsupported/);
+  assert.throws(() => layoutCodingCore(source('book', 1), 3), /Unsupported/);
 });

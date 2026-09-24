@@ -1,5 +1,4 @@
 import { availableChapters } from '../lib/available-chapters.mjs';
-import { machineLanguage } from '../lib/machine-language';
 import {
   loadPosition,
   positionKey,
@@ -7,7 +6,6 @@ import {
 } from '../lib/reading-position';
 
 export function initReadingPosition() {
-  if (machineLanguage(new URL(location.href))) return;
   const article = document.getElementById('chapter-content');
   const chapter = article?.dataset.chapterKey;
   if (!article || !chapter) return;
@@ -123,7 +121,6 @@ export function initReadingPosition() {
 }
 
 export function initContinueReading() {
-  if (machineLanguage(new URL(location.href))) return;
   const link = document.querySelector<HTMLAnchorElement>(
     '[data-continue-reading]',
   );

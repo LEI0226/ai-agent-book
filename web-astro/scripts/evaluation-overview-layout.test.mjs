@@ -96,8 +96,8 @@ function crosses([x1, y1, x2, y2], box) {
   return false;
 }
 
-test('evaluation overview layouts preserve all labels, typography, and bounds in 15 editions', () => {
-  assert.equal(Object.keys(editions).length, 15);
+test('evaluation overview layouts preserve all labels, typography, and bounds', () => {
+  assert.equal(Object.keys(editions).length, 1);
   for (const { directory, dir } of Object.values(editions))
     for (const figure of [1, 3, 10]) {
       const source = readFigure(directory, figure);
@@ -235,14 +235,14 @@ test('all editions retain evaluation relationships and route arrows through dedi
 
 test('source guards accept known variants and reject structural drift', () => {
   assert.doesNotThrow(() =>
-    layoutEmbodiedEvaluation(readFigure('book-en', 10)),
+    layoutEmbodiedEvaluation(readFigure('book', 10)),
   );
   assert.doesNotThrow(() => layoutEmbodiedEvaluation(readFigure('book', 10)));
   assert.doesNotThrow(() =>
-    layoutEmbodiedEvaluation(readFigure('book-tr', 10)),
+    layoutEmbodiedEvaluation(readFigure('book', 10)),
   );
   for (const figure of [1, 3, 10]) {
-    const source = readFigure('book-en', figure);
+    const source = readFigure('book', figure);
     assert.throws(
       () => layouts[figure](source.replace(/<rect\b[^>]*\/>/, '')),
       new RegExp(`Figure 7-${figure} source structure changed`),

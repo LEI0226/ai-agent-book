@@ -43,7 +43,7 @@ function readFigure(directory, number) {
 }
 
 test('memory-foundation layouts preserve every localized source label with readable type', () => {
-  assert.equal(Object.keys(editions).length, 15);
+  assert.equal(Object.keys(editions).length, 1);
   for (const edition of Object.values(editions))
     for (const [figure, specification] of Object.entries(figures)) {
       const source = readFigure(edition.directory, figure);
@@ -92,7 +92,7 @@ test('memory-foundation layouts preserve every localized source label with reada
 test('memory-foundation layouts retain source relationships and content regions', () => {
   for (const [figure, specification] of Object.entries(figures)) {
     const layout = layoutMemoryFoundation(
-      readFigure('book-en', figure),
+      readFigure('book', figure),
       Number(figure),
     );
     assert.equal(
@@ -102,16 +102,16 @@ test('memory-foundation layouts retain source relationships and content regions'
     );
   }
 
-  const overview = layoutMemoryFoundation(readFigure('book-en', 1), 1);
+  const overview = layoutMemoryFoundation(readFigure('book', 1), 1);
   assert.match(overview, /data-region="user-memory"/);
   assert.match(overview, /data-region="knowledge-base"/);
   assert.match(overview, /data-region="shared-foundation"/);
 
-  const comparison = layoutMemoryFoundation(readFigure('book-en', 3), 3);
+  const comparison = layoutMemoryFoundation(readFigure('book', 3), 3);
   assert.equal((comparison.match(/data-stage="v2-[^"]+"/g) || []).length, 5);
   assert.equal((comparison.match(/data-stage="v3-[^"]+"/g) || []).length, 5);
 
-  const memoryTypes = layoutMemoryFoundation(readFigure('book-en', 4), 4);
+  const memoryTypes = layoutMemoryFoundation(readFigure('book', 4), 4);
   assert.equal(
     (memoryTypes.match(/data-memory-subtype="[^"]+"/g) || []).length,
     3,
@@ -127,18 +127,18 @@ test('memory-foundation layouts retain source relationships and content regions'
   assert.match(memoryTypes, /M162 \d+ H370 V\d+/);
   assert.match(memoryTypes, /M838 \d+ H630 V\d+/);
 
-  const rag = layoutMemoryFoundation(readFigure('book-en', 5), 5);
+  const rag = layoutMemoryFoundation(readFigure('book', 5), 5);
   assert.equal((rag.match(/data-stage="[^"]+"/g) || []).length, 4);
   assert.equal((rag.match(/data-example="[^"]+"/g) || []).length, 3);
 
-  const layered = layoutMemoryFoundation(readFigure('book-en', 7), 7);
+  const layered = layoutMemoryFoundation(readFigure('book', 7), 7);
   assert.equal((layered.match(/data-layer="layer-\d"/g) || []).length, 3);
   assert.equal((layered.match(/<circle\b/g) || []).length, 19);
 });
 
 test('memory-foundation layouts reject source structure drift', () => {
   for (const figure of Object.keys(figures).map(Number)) {
-    const source = readFigure('book-en', figure);
+    const source = readFigure('book', figure);
     assert.throws(
       () =>
         layoutMemoryFoundation(
@@ -157,7 +157,7 @@ test('memory-foundation layouts reject source structure drift', () => {
     );
   }
   assert.throws(
-    () => layoutMemoryFoundation(readFigure('book-en', 1), 2),
+    () => layoutMemoryFoundation(readFigure('book', 1), 2),
     /Unsupported memory-foundation figure/,
   );
 });

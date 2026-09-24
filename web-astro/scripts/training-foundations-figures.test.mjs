@@ -39,7 +39,7 @@ const renderedLabels = (source) =>
   ].map((match) => ({ index: Number(match[1]), value: normalize(match[2]) }));
 
 test('Chapter 8 training-foundation layouts retain every localized label in both themes', () => {
-  assert.equal(Object.keys(editions).length, 15);
+  assert.equal(Object.keys(editions).length, 1);
   for (const { directory } of Object.values(editions))
     for (const [number, { layout, labels: expectedCount }] of Object.entries(
       figures,
@@ -87,7 +87,7 @@ test('Chapter 8 training-foundation layouts retain every localized label in both
 
 test('Chapter 8 training-foundation layouts reject source structure drift', () => {
   const source = readFileSync(
-    new URL('../../book-en/images/fig8-4.svg', import.meta.url),
+    new URL('../../book/images/fig8-4.svg', import.meta.url),
     'utf8',
   );
   assert.throws(
@@ -102,7 +102,7 @@ test('English next-token illustration keeps the Chinese example and its original
       new URL(`../../${directory}/images/fig8-8.svg`, import.meta.url),
       'utf8',
     );
-  const english = read('book-en');
+  const english = read('book');
   const chinese = read('book');
   const expected = sourceLabels(english);
   const original = sourceLabels(chinese);
@@ -131,7 +131,7 @@ test('English next-token illustration keeps the Chinese example and its original
 
 test('English SFT heading allows the chapter’s conditional use of SFT before RL', () => {
   const source = readFileSync(
-    new URL('../../book-en/images/fig8-11.svg', import.meta.url),
+    new URL('../../book/images/fig8-11.svg', import.meta.url),
     'utf8',
   );
   const expected = sourceLabels(source);

@@ -36,8 +36,8 @@ function boxes(svg, element) {
   }));
 }
 
-test('tool-cache layouts preserve every source label once in all 15 editions', () => {
-  assert.equal(Object.keys(editions).length, 15);
+test('tool-cache layouts preserve every source label once in the single edition', () => {
+  assert.equal(Object.keys(editions).length, 1);
   for (const edition of Object.values(editions))
     for (const figure of [3, 4]) {
       const source = readFigure(edition.directory, figure);
@@ -165,7 +165,7 @@ test('Figure 4-4 keeps two schema callouts clear of cards and each other', () =>
 
 test('tool-cache layouts reject source drift and unsupported figures', () => {
   for (const figure of [3, 4]) {
-    const source = readFigure('book-en', figure);
+    const source = readFigure('book', figure);
     assert.throws(
       () => layoutToolCache(source.replace(/<rect\b[^>]*\/>/, ''), figure),
       new RegExp(`Figure 4-${figure} source structure changed`),
@@ -180,7 +180,7 @@ test('tool-cache layouts reject source drift and unsupported figures', () => {
     );
   }
   assert.throws(
-    () => layoutToolCache(readFigure('book-en', 3), 2),
+    () => layoutToolCache(readFigure('book', 3), 2),
     /Unsupported tool-cache figure/,
   );
 });

@@ -47,7 +47,7 @@ const figures = {
 };
 
 test('Chapter 10 collaboration and society layouts retain every localized label in both themes', () => {
-  assert.equal(Object.keys(editions).length, 15);
+  assert.equal(Object.keys(editions).length, 1);
   for (const { directory } of Object.values(editions))
     for (const [
       number,
@@ -96,7 +96,7 @@ test('Chapter 10 collaboration and society layouts retain every localized label 
 
 test('Figure 10-9 preserves the SOP pipeline, artifacts, and QA feedback relationship', () => {
   const source = readFileSync(
-    new URL('../../book-en/images/fig10-9.svg', import.meta.url),
+    new URL('../../book/images/fig10-9.svg', import.meta.url),
     'utf8',
   );
   const layout = layoutMetaGPTCollaboration(source);
@@ -124,7 +124,7 @@ test('Figure 10-9 preserves the SOP pipeline, artifacts, and QA feedback relatio
 
 test('Figure 10-10 keeps memory, reflection, and planning in causal order before emergence', () => {
   const source = readFileSync(
-    new URL('../../book-en/images/fig10-10.svg', import.meta.url),
+    new URL('../../book/images/fig10-10.svg', import.meta.url),
     'utf8',
   );
   const layout = layoutAITownArchitecture(source);
@@ -150,7 +150,7 @@ test('Figure 10-10 keeps memory, reflection, and planning in causal order before
 
 test('Figure 10-11 preserves judge fan-out, role-filtered context, and voice phases', () => {
   const source = readFileSync(
-    new URL('../../book-en/images/fig10-11.svg', import.meta.url),
+    new URL('../../book/images/fig10-11.svg', import.meta.url),
     'utf8',
   );
   const layout = layoutVoiceWerewolfSystem(source);
@@ -191,7 +191,7 @@ test('Figure 10-11 preserves judge fan-out, role-filtered context, and voice pha
 test('Chapter 10 layouts reserve readable wrapping areas and keep arrows in gutters', () => {
   for (const [number, { layout }] of Object.entries(figures)) {
     const source = readFileSync(
-      new URL(`../../book-en/images/fig10-${number}.svg`, import.meta.url),
+      new URL(`../../book/images/fig10-${number}.svg`, import.meta.url),
       'utf8',
     );
     const result = layout(source);
@@ -222,7 +222,7 @@ test('Chapter 10 layouts reserve readable wrapping areas and keep arrows in gutt
 test('Chapter 10 layouts reject source structure drift', () => {
   for (const [number, { layout }] of Object.entries(figures)) {
     const source = readFileSync(
-      new URL(`../../book-en/images/fig10-${number}.svg`, import.meta.url),
+      new URL(`../../book/images/fig10-${number}.svg`, import.meta.url),
       'utf8',
     );
     assert.throws(

@@ -1,1 +1,4 @@
 images/cover-image.png
+
+# 由 tools/rsvg-convert.c 编译出的可执行文件（见 tools/README.md）
+tools/bin/

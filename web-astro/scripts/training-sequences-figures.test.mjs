@@ -43,7 +43,7 @@ const renderedLabels = (source) =>
   }));
 
 test('Chapter 8 sequence layouts retain every localized label in both themes', () => {
-  assert.equal(Object.keys(editions).length, 15);
+  assert.equal(Object.keys(editions).length, 1);
 
   for (const { directory } of Object.values(editions))
     for (const [number, figure] of Object.entries(figures)) {
@@ -95,7 +95,7 @@ test('Chapter 8 sequence layouts retain every localized label in both themes', (
 test('Sequence layouts keep wrapping regions in bounds at readable sizes', () => {
   for (const [number, figure] of Object.entries(figures)) {
     const source = readFileSync(
-      new URL(`../../book-en/images/fig8-${number}.svg`, import.meta.url),
+      new URL(`../../book/images/fig8-${number}.svg`, import.meta.url),
       'utf8',
     );
     const layout = figure.layout(source);
@@ -126,7 +126,7 @@ test('Sequence layouts keep wrapping regions in bounds at readable sizes', () =>
 
 test('Turn comparison preserves both modes and all four comparison dimensions', () => {
   const source = readFileSync(
-    new URL('../../book-en/images/fig8-14.svg', import.meta.url),
+    new URL('../../book/images/fig8-14.svg', import.meta.url),
     'utf8',
   );
   const layout = layoutTurnComparison(source);
@@ -148,7 +148,7 @@ test('Turn comparison preserves both modes and all four comparison dimensions', 
 
 test('Credit assignment preserves step fields, reward approaches, and roomy transitions', () => {
   const source = readFileSync(
-    new URL('../../book-en/images/fig8-15.svg', import.meta.url),
+    new URL('../../book/images/fig8-15.svg', import.meta.url),
     'utf8',
   );
   const layout = layoutCreditAssignment(source);
@@ -189,11 +189,11 @@ test('Credit assignment preserves step fields, reward approaches, and roomy tran
 
 test('Sequence layout guards reject source structure drift', () => {
   const turnSource = readFileSync(
-    new URL('../../book-en/images/fig8-14.svg', import.meta.url),
+    new URL('../../book/images/fig8-14.svg', import.meta.url),
     'utf8',
   );
   const creditSource = readFileSync(
-    new URL('../../book-en/images/fig8-15.svg', import.meta.url),
+    new URL('../../book/images/fig8-15.svg', import.meta.url),
     'utf8',
   );
 

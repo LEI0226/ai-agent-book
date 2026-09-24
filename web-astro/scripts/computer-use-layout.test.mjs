@@ -9,7 +9,7 @@ const source = (dir, n) =>
     new URL(`../../${dir}/images/fig6-${n}.svg`, import.meta.url),
     'utf8',
   );
-test('Computer-use layouts preserve every label and canvas bounds in 15 editions', () => {
+test('Computer-use layouts preserve every label and canvas bounds', () => {
   for (const { directory, dir } of Object.values(editions))
     for (const n of [11, 12, 13, 14]) {
       const s = source(directory, n),
@@ -40,7 +40,7 @@ test('Computer-use layouts preserve every label and canvas bounds in 15 editions
     }
 });
 test('Perception retains the screenshot-inference-action loop with an external return route', () => {
-  const out = layoutComputerUse(source('book-en', 11), 11);
+  const out = layoutComputerUse(source('book', 11), 11);
   assert.equal((out.match(/marker-end=/g) || []).length, 3);
   for (const name of [
     'screenshot-inference',
@@ -52,10 +52,10 @@ test('Perception retains the screenshot-inference-action loop with an external r
 });
 test('Action-space and element-index diagrams keep five-stage workflows and four annotation IDs', () => {
   for (const n of [12, 13]) {
-    const out = layoutComputerUse(source('book-en', n), n);
+    const out = layoutComputerUse(source('book', n), n);
     assert.equal((out.match(/marker-end=/g) || []).length, 4);
   }
-  const out = layoutComputerUse(source('book-en', 13), 13);
+  const out = layoutComputerUse(source('book', 13), 13);
   assert.equal((out.match(/data-annotated-element=/g) || []).length, 4);
   for (const text of [
     'www.example.com',
@@ -66,7 +66,7 @@ test('Action-space and element-index diagrams keep five-stage workflows and four
     assert.ok(out.includes(text));
 });
 test('Coordinate scaling retains source values and both model-coordinate directions', () => {
-  const out = layoutComputerUse(source('book-en', 14), 14);
+  const out = layoutComputerUse(source('book', 14), 14);
   for (const name of ['screen-downscale', 'training-output', 'output-training'])
     assert.ok(out.includes(`data-edge="${name}"`));
   for (const text of [
@@ -85,7 +85,7 @@ test('Coordinate scaling retains source values and both model-coordinate directi
   assert.throws(
     () =>
       layoutComputerUse(
-        source('book-en', 14).replace(/<text[\s\S]*?<\/text>/, ''),
+        source('book', 14).replace(/<text[\s\S]*?<\/text>/, ''),
         14,
       ),
     /source labels changed/,

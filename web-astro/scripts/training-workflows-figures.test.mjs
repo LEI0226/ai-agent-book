@@ -47,7 +47,7 @@ function labelHeight(svg, index) {
 }
 
 test('Chapter 8 training workflow layouts retain every localized label in both themes', () => {
-  assert.equal(Object.keys(editions).length, 15);
+  assert.equal(Object.keys(editions).length, 1);
   for (const { directory } of Object.values(editions))
     for (const [number, layout] of Object.entries(layouts)) {
       const source = readFileSync(
@@ -71,11 +71,11 @@ test('Chapter 8 training workflow layouts retain every localized label in both t
 
 test('Training workflow layouts provide roomy wrapped cards and explicit connectors', () => {
   const sftSource = readFileSync(
-    new URL('../../book-en/images/fig8-10.svg', import.meta.url),
+    new URL('../../book/images/fig8-10.svg', import.meta.url),
     'utf8',
   );
   const toolSource = readFileSync(
-    new URL('../../book-en/images/fig8-16.svg', import.meta.url),
+    new URL('../../book/images/fig8-16.svg', import.meta.url),
     'utf8',
   );
   const sft = layoutSftPipeline(sftSource);
@@ -106,11 +106,11 @@ test('Training workflow layouts provide roomy wrapped cards and explicit connect
 
 test('Layout guards reject changed source label counts', () => {
   const sftSource = readFileSync(
-    new URL('../../book-en/images/fig8-10.svg', import.meta.url),
+    new URL('../../book/images/fig8-10.svg', import.meta.url),
     'utf8',
   );
   const toolSource = readFileSync(
-    new URL('../../book-en/images/fig8-16.svg', import.meta.url),
+    new URL('../../book/images/fig8-16.svg', import.meta.url),
     'utf8',
   );
   assert.throws(
